@@ -5,8 +5,8 @@ using Market_App.IModels;
 
 namespace Market_App.Models
 {
-    internal class Client
+    internal class Customer : ICustomer
     {
-
+        public int ID { get; set; }
     }
 }
