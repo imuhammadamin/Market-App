@@ -8,12 +8,11 @@ namespace Market_App.Models
     internal class Products
     {
         public static IList<Product> allProducts = new List<Product>();
-
-        public string[] lines = File.ReadAllLines
-            (@"D:\Codes\.NET_Projects\Market_App\Database\Database.txt").ToArray();
+        public static string path = @".\Database\Database.txt";
+        public static string[] lines = File.ReadAllLines(path).ToArray();
 
         #region GetAllProducts
-        public void GetAllProducts ()
+        public static List<Product> GetAllProducts ()
         {
             foreach (string line in lines)
             {
@@ -26,6 +25,7 @@ namespace Market_App.Models
                     Type = prod[3]
                 });
             }
+            return (List<Product>)allProducts;
         }
         #endregion
     }

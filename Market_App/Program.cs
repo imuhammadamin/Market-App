@@ -8,8 +8,9 @@ namespace Market_App
     {
         static void Main(string[] args)
         {
-            Console.Write("Ismingizni kiriting: ");
-            string name = Console.ReadLine();
+            /*Console.Write("Ismingizni kiriting: ");
+            string name = Console.ReadLine();*/
+            Commerce.Execute();
         }
     }
 }

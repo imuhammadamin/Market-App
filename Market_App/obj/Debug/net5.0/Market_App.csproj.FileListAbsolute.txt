@@ -1,0 +1,16 @@
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\Market_App.exe
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\Market_App.deps.json
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\Market_App.runtimeconfig.json
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\Market_App.runtimeconfig.dev.json
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\Market_App.dll
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\ref\Market_App.dll
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\Market_App.pdb
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.csproj.AssemblyReference.cache
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.AssemblyInfoInputs.cache
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.AssemblyInfo.cs
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.csproj.CoreCompileInputs.cache
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.dll
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\ref\Market_App.dll
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.pdb
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\obj\Debug\net5.0\Market_App.genruntimeconfig.cache
