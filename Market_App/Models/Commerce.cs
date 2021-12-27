@@ -12,8 +12,10 @@ namespace Market_App.Models
         {
             while (true)
             {
-                Console.WriteLine("1. Browse all products | 2. Add product | 3. Search product | 4. Update product | 5. Exit");
-                Console.WriteLine("Enter your option: ");
+                Console.WriteLine(" 1. Browse all products " + "\n" + " 2. Add product " + "\n" + " 3. Search product " + "\n" + " 4. Update product " + "\n"+" 5. Exit");
+
+                //Console.WriteLine("1. Browse all products | 2. Add product | 3. Search product | 4. Update product | 5. Exit");
+                Console.Write("Enter your option: ");
                 string option = Console.ReadLine();
 
                 switch(option)
