@@ -8,17 +8,9 @@ namespace Market_App.Models
     internal class Basket : IBasket
     {
         private IList<Product> _basket = new List<Product>();
-        public void AddToBasket(string name, int price, int residue, string type, float purchased)
+        public void AddToBasket(Product product)
         {
-            _basket.Add(
-                new Product
-                {
-                    Name = name,
-                    Price = price,
-                    Residue = residue,
-                    Type = type,
-                    Purchased = purchased,
-                });
+            _basket.Add(product);
         }
         public void RemoveToBasket(int item)
         {
