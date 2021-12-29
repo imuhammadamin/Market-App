@@ -32,6 +32,7 @@ namespace Market_App.Models
                         AddProduct(Console.ReadLine());
                         break;
                     case "5":
+                        Console.Write("Bless you!");
                         Environment.Exit(0);
                         break;
                 }
