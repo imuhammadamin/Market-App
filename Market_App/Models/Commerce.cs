@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Market_App.Models;
 using System.Collections.Generic;
+using static System.ConsoleColor;
 
 namespace Market_App.Models
 {
@@ -12,9 +13,11 @@ namespace Market_App.Models
         {
             while (true)
             {
-                Console.WriteLine(" 1. Browse all products " + "\n" + " 2. Add product " + "\n" + " 3. Search product " + "\n" + " 4. Update product " + "\n"+" 5. Exit");
+                Console.ForegroundColor = Blue;
+                Console.WriteLine("1. Browse all products  |  2. Add product  |  3. Search product  |  4. Update product  |  5. Exit");
+                Console.ResetColor();
 
-                //Console.WriteLine("1. Browse all products | 2. Add product | 3. Search product | 4. Update product | 5. Exit");
+                
                 Console.Write("Enter your option: ");
                 string option = Console.ReadLine();
 
