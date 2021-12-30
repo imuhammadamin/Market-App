@@ -38,7 +38,7 @@ namespace Market_App.Models
                         Console.WriteLine("Searching product: ");
                         break;
                     case "4": 
-                        Console.WriteLine("Updating product: "); break
+                        Console.WriteLine("Updating product: "); break;
                     case "5":
                         Console.Write("Bless you!");
                         Environment.Exit(0);
