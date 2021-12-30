@@ -34,6 +34,11 @@ namespace Market_App.Models
                         Console.Write("Enter product: ");
                         AddProduct(Console.ReadLine());
                         break;
+                    case "3":
+                        Console.WriteLine("Searching product: ");
+                        break;
+                    case "4": 
+                        Console.WriteLine("Updating product: "); break
                     case "5":
                         Console.Write("Bless you!");
                         Environment.Exit(0);
