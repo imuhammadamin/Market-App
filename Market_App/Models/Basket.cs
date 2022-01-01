@@ -12,13 +12,17 @@ namespace Market_App.Models
         {
             _basket.Add(product);
         }
-        public static void RemoveToBasket(int item)
+        public static void RemoveFromBasket(Product product)
         {
-            _basket.RemoveAt(item);
+            _basket.Remove(product);
         }
         public static IList<Product> GetBasket()
         {
             return _basket;
+        }
+        public static void ClearBasket()
+        {
+            _basket.Clear();
         }
     }
 }

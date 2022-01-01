@@ -14,7 +14,7 @@ namespace Market_App.Models
         {
             while (true)
             {
-                //Console.Clear();
+                Console.Clear();
                 Console.WriteLine("1. Browse all products | 2. Add product | 3. Search product | 4. Update product | 5. Basket | 6. Exit");
                 Console.Write("Enter your option: ");
                 string option = Console.ReadLine();
@@ -22,7 +22,6 @@ namespace Market_App.Models
                 switch(option)
                 {
                     case "1":
-                        Products.allProducts.Clear();
                         BrowseProducts();
                         break;
                     case "2":
@@ -32,19 +31,7 @@ namespace Market_App.Models
                         SearchProduct();
                         break;
                     case "4":
-                        var allProducts = Products.GetAllProducts();
-                        for (int i = 0; i < allProducts.Count; i++)
-                        {
-                            Console.WriteLine($"{i + 1}. {allProducts[i].Name} | {allProducts[i].Price} | {allProducts[i].Type}");
-                        }
-                        for (int i = 1; i < allProducts.Count + 1; i++)
-                        {
-                            if (i == int.Parse(Console.ReadLine()))
-                            {
-                                Console.Write("\nMake changes to the product [Name, Price, Remainder]: ");
-                                string makeProduct = Console.ReadLine();
-                            }
-                        }
+                        UpdateProduct();
                         break;
                     case "5":
                         ShowBasket();
@@ -59,6 +46,7 @@ namespace Market_App.Models
         private static void BrowseProducts()
         {
             Console.Clear();
+
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
             foreach (var product in Sales.GetProductsForSelling())
@@ -67,73 +55,77 @@ namespace Market_App.Models
             }
 
             table.Write();
-            SmallMenu("Buy");
+            OptionMenu("Add to Basket");
         }
-
-        public static void AddProduct()
+        private static void AddProduct()
         {
-            Console.Write("\nEnter product: ");
+            int count = Products.GetAllProducts().Count + 1;
 
-            string product = Console.ReadLine();
+            Console.Write("\nEnter product name: ");
+            string productName = Console.ReadLine();
 
-            File.AppendAllText(Products.path, product + Environment.NewLine);
+            Console.Write("Enter price: ");
+            int price = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Product added.\n");
-            SmallMenu("Add product");
+            Console.Write("Enter unit: ");
+            string unit = Console.ReadLine();
+
+            Console.Write("Enter residue: ");
+            string residue = Console.ReadLine();
+
+            Console.Write("Enter type: ");
+            string type = Console.ReadLine();
+
+            File.AppendAllText(Products.path, count + " " + productName + " " + price + " " + unit + " " + residue + " " + type + Environment.NewLine);
+
+            Console.WriteLine("Product added.\n"); 
+            OptionMenu("Add product");
         }
-
-        public static void SearchProduct()
+        private static void SearchProduct()
         {
             Console.Write("\nEnter the product name: ");
             string nameProduct = Console.ReadLine();
-
-            var product = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct));
+            var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct));
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-            foreach (var pr in product)
+            foreach (var pr in prod)
                 table.AddRow(pr.ID, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
 
             table.Write();
-            SmallMenu("Buy");
+            OptionMenu("Add to Basket");
         }
-
-        private static void SmallMenu(string firsOption)
+        private static void UpdateProduct()
         {
-            Console.WriteLine($"1. {firsOption}");
-            Console.WriteLine($"2. Back to Menu");
-
-            Console.Write("Enter option: ");
-            string option = Console.ReadLine();
-
-            switch(option)
+            var allProducts = Products.GetAllProducts();
+            for (int i = 0; i < allProducts.Count; i++)
             {
-                case "1":
-                    if (firsOption == "Add product")
-                        AddProduct();
-                    else if (firsOption == "Buy")
-                        Buy();
-                    break;
-                case "2":
-                    Execute();
-                    break;
-                default:
-                    Console.WriteLine("Please enter only 1 or 2!");
-                    SmallMenu(firsOption);
-                    break;
+                Console.WriteLine($"{i + 1}. {allProducts[i].Name} {allProducts[i].Price} {allProducts[i].Type}");
+            }
+            for (int i = 1; i < allProducts.Count + 1; i++)
+            {
+                if (i == int.Parse(Console.ReadLine()))
+                {
+                    Console.Write("\nMake changes to the product [Name, Price, Remainder]: ");
+                    string makeProduct = Console.ReadLine();
+                }
             }
         }
         private static void ShowBasket()
         {
+            Console.Clear();
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
             
             foreach (var basket in Basket.GetBasket())
             {
-                table.AddRow(basket.ID , basket.Name, basket.Price, basket.Unit, basket.Residue, basket.Type);
+                table.AddRow(basket.ID, basket.Name, basket.Price, basket.Unit, basket.Residue, basket.Type);
             }
 
             table.Write();
+            if (Basket.GetBasket().Count == 0)
+                OptionMenu("Show all products");
+            else OptionMenu("Buy");
         }
-        private static void Buy()
+        private static void AddToBasket()
         {
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
@@ -151,37 +143,33 @@ namespace Market_App.Models
                 prod.Residue = amount;
                 prod.Type = pr.Type;
             }
-            Calculation(id, amount);
             Basket.AddToBasket(prod);
-
+            BrowseProducts();
         }
-
         private static void Calculation(int id, int amount)
         {
-            IList<Product> products = new List<Product>();
+            var products = Sales.GetProductsForSelling();
             Product product = new Product();
 
-            foreach (var pr in Products.GetAllProducts())
+            foreach (var pr in products)
             {
                 product = pr;
                 if (product.Price < 8000)
-                    product.Price -= 500;
-                else if (product.Price < 20000)
-                    product.Price -= 2000;
-                else if (product.Price < 50000)
-                    product.Price -= 5000;
-                else if (product.Price < 80000)
-                    product.Price -= 10000;
-                if (product.ID == id)
+                     product.Price -= 500;
+                 else if (product.Price < 20000)
+                     product.Price -= 2000;
+                 else if (product.Price < 50000)
+                     product.Price -= 5000;
+                 else if (product.Price < 80000)
+                     product.Price -= 10000;
+                if (pr.ID == id)
                 {
-                    product.Residue -= amount;
+                    pr.Residue -= amount;
                 }
-                products.Add(product);
             }
-
             using (TextWriter tw = new StreamWriter("Data.txt"))
             {
-                for(int i = 0; i < amount; i++)
+                for (int i = 0; i < products.Count; i++)
                     tw.WriteLine(
                           products[i].ID + " "
                         + products[i].Name + " "
@@ -191,6 +179,72 @@ namespace Market_App.Models
                         + products[i].Type);
             }
 
+        }
+        private static void OptionMenu(string firstOption)
+        {
+            Console.WriteLine($"1. {firstOption}");
+            if (firstOption == "Show Basket" || firstOption == "Add to Basket")
+            {
+                Console.WriteLine("2. Show Basket");
+                Console.WriteLine("3. Back to Menu");
+            }
+            else if (firstOption == "Buy")
+            {
+                Console.WriteLine("2. Remove from Basket");
+                Console.WriteLine("3. Back to Menu");
+            }
+            else Console.WriteLine("2. Back to Menu");
+
+            Console.Write("Enter option: ");
+            string option = Console.ReadLine();
+
+            switch (option)
+            {
+                case "1":
+                    if (firstOption == "Add product")
+                        AddProduct();
+                    else if (firstOption == "Add to Basket")
+                        AddToBasket();
+                    else if (firstOption == "Buy")
+                        Buy();
+                    else if (firstOption == "Show all products")
+                        BrowseProducts();
+                    break;
+                case "2":
+                    if (firstOption == "Buy")
+                        RemoveFromBasket();
+                    else if (firstOption == "Add to Basket")
+                        ShowBasket();
+                    else Execute();
+                    break;
+                default:
+                    Execute();
+                    break;
+            }
+        }
+        private static void Buy()
+        {
+            Console.Write("Enter №: ");
+            int id = int.Parse(Console.ReadLine());
+            var product = Basket.GetBasket().Where(x => x.ID.Equals(id));
+          
+            foreach (var pr in product)
+            {
+                Calculation(id, pr.Residue);
+            }
+            
+            Basket.ClearBasket();
+        }
+        private static void RemoveFromBasket()
+        {
+            Console.Write("Enter №: ");
+            int id = int.Parse(Console.ReadLine());
+            foreach(var product in Basket.GetBasket())
+            {
+                if(product.ID.Equals(id))
+                    Basket.RemoveFromBasket(product);
+                    Console.WriteLine("\nYou have removed the product!");
+            }
         }
     }
 }

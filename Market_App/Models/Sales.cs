@@ -6,14 +6,14 @@ namespace Market_App.Models
 {
     internal class Sales
     {
-        public static IList<Product> GetProductsForSelling ()
-        {
-            IList<Product> result = new List<Product>();
-            Product res = new Product();
+        private static IList<Product> _sellingProducts = new List<Product>();
 
-            foreach (Product pr in Products.GetAllProducts())
+        private static void SellingProducts()
+        {
+            _sellingProducts.Clear();
+            foreach (Product res in Products.GetAllProducts())
             {
-                res = pr;
+                //res = pr;
                 if (res.Price < 8000)
                     res.Price += 500;
                 else if (res.Price < 20000)
@@ -23,10 +23,13 @@ namespace Market_App.Models
                 else if (res.Price < 80000)
                     res.Price += 10000;
 
-                result.Add(res);
+                _sellingProducts.Add(res);
             }
-
-            return result;
+        }
+        public static IList<Product> GetProductsForSelling()
+        {
+            SellingProducts();
+            return _sellingProducts;
         }
     }
 }
