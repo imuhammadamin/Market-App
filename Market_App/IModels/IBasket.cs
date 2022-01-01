@@ -7,8 +7,7 @@ namespace Market_App.IModels
 {
     interface IBasket
     {
-        public void AddToBasket (Product product);
-        public void RemoveToBasket(int item);
-        public IList<Product> GetBasket();
+        /*public static void AddToBasket (IEnumerable<Product> product);
+        public static void RemoveToBasket(int item);*/
     }
 }

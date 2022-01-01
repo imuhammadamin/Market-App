@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Market_App.Models;
 
@@ -8,8 +9,6 @@ namespace Market_App
     {
         static void Main(string[] args)
         {
-            /*Console.Write("Ismingizni kiriting: ");
-            string name = Console.ReadLine();*/
             Commerce.Execute();
         }
     }

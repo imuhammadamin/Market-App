@@ -11,7 +11,7 @@ namespace Market_App.Models
             IList<Product> result = new List<Product>();
             Product res = new Product();
 
-            foreach (Product pr in Products.allProducts)
+            foreach (Product pr in Products.GetAllProducts())
             {
                 res = pr;
                 if (res.Price < 8000)

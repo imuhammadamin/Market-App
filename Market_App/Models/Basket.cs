@@ -5,18 +5,18 @@ using Market_App.IModels;
 
 namespace Market_App.Models
 {
-    internal class Basket : IBasket
+    internal class Basket
     {
-        private IList<Product> _basket = new List<Product>();
-        public void AddToBasket(Product product)
+        private static IList<Product> _basket = new List<Product>();
+        public static void AddToBasket(Product product)
         {
             _basket.Add(product);
         }
-        public void RemoveToBasket(int item)
+        public static void RemoveToBasket(int item)
         {
             _basket.RemoveAt(item);
         }
-        public IList<Product> GetBasket()
+        public static IList<Product> GetBasket()
         {
             return _basket;
         }
