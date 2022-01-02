@@ -84,7 +84,8 @@ namespace Market_App.Models
         {
             Console.Write("\nEnter the product name: ");
             string nameProduct = Console.ReadLine();
-            var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct));
+            string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
+            var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
             foreach (var pr in prod)
