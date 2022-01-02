@@ -10,7 +10,6 @@ namespace Market_App
         static void Main(string[] args)
         {
             Commerce.Execute();
-
         }
     }
 }

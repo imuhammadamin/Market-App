@@ -22,7 +22,7 @@ namespace Market_App.Models
                 switch(option)
                 {
                     case "1":
-                        BrowseProducts();
+                        ShowProducts();
                         break;
                     case "2":
                         AddProduct();
@@ -42,8 +42,7 @@ namespace Market_App.Models
                 }
             }
         }
-        
-        private static void BrowseProducts()
+        private static void ShowProducts()
         {
             Console.Clear();
 
@@ -96,19 +95,15 @@ namespace Market_App.Models
         }
         private static void UpdateProduct()
         {
-            var allProducts = Products.GetAllProducts();
-            for (int i = 0; i < allProducts.Count; i++)
+            var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
+
+            foreach (var product in Products.GetAllProducts())
             {
-                Console.WriteLine($"{i + 1}. {allProducts[i].Name} {allProducts[i].Price} {allProducts[i].Type}");
+                table.AddRow(product.ID, product.Name, product.Price, product.Unit, product.Residue, product.Type);
             }
-            for (int i = 1; i < allProducts.Count + 1; i++)
-            {
-                if (i == int.Parse(Console.ReadLine()))
-                {
-                    Console.Write("\nMake changes to the product [Name, Price, Remainder]: ");
-                    string makeProduct = Console.ReadLine();
-                }
-            }
+
+            table.Write();
+            
         }
         private static void ShowBasket()
         {
@@ -144,7 +139,7 @@ namespace Market_App.Models
                 prod.Type = pr.Type;
             }
             Basket.AddToBasket(prod);
-            BrowseProducts();
+            ShowProducts();
         }
         private static void Calculation(int id, int amount)
         {
@@ -183,43 +178,80 @@ namespace Market_App.Models
         private static void OptionMenu(string firstOption)
         {
             Console.WriteLine($"1. {firstOption}");
-            if (firstOption == "Show Basket" || firstOption == "Add to Basket")
+            if (firstOption == "Add to Basket")
             {
                 Console.WriteLine("2. Show Basket");
                 Console.WriteLine("3. Back to Menu");
+                Console.Write("Enter option: ");
+
+                string option = Console.ReadLine();
+                switch (option)
+                {
+                    case "1":
+                        AddToBasket();
+                        break;
+                    case "2":
+                        ShowBasket();
+                        break;
+                    case "3":
+                        Execute();
+                        break;
+                    default:
+                        Console.WriteLine("Please enter only 1, 2 or 3!");
+                        OptionMenu(firstOption);
+                        break;
+                }
             }
             else if (firstOption == "Buy")
             {
-                Console.WriteLine("2. Remove from Basket");
-                Console.WriteLine("3. Back to Menu");
-            }
-            else Console.WriteLine("2. Back to Menu");
+                Console.WriteLine("2. Remove from basket");
+                Console.WriteLine("3. Remove all products from the basket");
+                Console.WriteLine("4. Back to Menu");
+                Console.Write("Enter option: ");
 
-            Console.Write("Enter option: ");
-            string option = Console.ReadLine();
-
-            switch (option)
-            {
-                case "1":
-                    if (firstOption == "Add product")
-                        AddProduct();
-                    else if (firstOption == "Add to Basket")
-                        AddToBasket();
-                    else if (firstOption == "Buy")
+                string option = Console.ReadLine();
+                switch (option)
+                {
+                    case "1":
                         Buy();
-                    else if (firstOption == "Show all products")
-                        BrowseProducts();
-                    break;
-                case "2":
-                    if (firstOption == "Buy")
+                        break;
+                    case "2":
                         RemoveFromBasket();
-                    else if (firstOption == "Add to Basket")
+                        break;
+                    case "3":
+                        Basket.ClearBasket();
                         ShowBasket();
-                    else Execute();
-                    break;
-                default:
-                    Execute();
-                    break;
+                        break;
+                    case "4":
+                        Execute();
+                        break;
+                    default:
+                        Console.WriteLine("Please enter only 1, 2, 3 or 4!");
+                        OptionMenu(firstOption);
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("2. Back to Menu");
+                Console.Write("Enter option: ");
+                string option = Console.ReadLine();
+                switch (option)
+                {
+                    case "1":
+                        if (firstOption == "Show all products")
+                            ShowProducts();
+                        else if (firstOption == "Add product")
+                            AddProduct();
+                        break;
+                    case "2":
+                        Execute();
+                        break;
+                    default:
+                        Console.WriteLine("Please enter only 1 or 2!");
+                        OptionMenu(firstOption);
+                        break;
+                }
             }
         }
         private static void Buy()
@@ -241,9 +273,14 @@ namespace Market_App.Models
             int id = int.Parse(Console.ReadLine());
             foreach(var product in Basket.GetBasket())
             {
-                if(product.ID.Equals(id))
-                    Basket.RemoveFromBasket(product);
-                    Console.WriteLine("\nYou have removed the product!");
+                if (product.ID.Equals(id))
+                    if (Basket.RemoveFromBasket(product))
+                        ShowBasket();
+                else
+                {
+                    Console.WriteLine("Such a product is not available in the basket!");
+                    RemoveFromBasket();
+                }
             }
         }
     }
