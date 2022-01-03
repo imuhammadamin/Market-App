@@ -50,7 +50,7 @@ namespace Market_App
 
                 break;
               
-                Sign Up
+                
                 case "2":
                     Console.Write("Name: ");
                     string firstName = Console.ReadLine();
