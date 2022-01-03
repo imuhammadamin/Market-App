@@ -121,7 +121,7 @@ namespace Market_App.Models
                 OptionMenu("Show all products");
             else OptionMenu("Buy");
         }
-        private static void AddToBasket()
+        private static void AddToBasket(string opt)
         {
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
@@ -144,20 +144,10 @@ namespace Market_App.Models
         }
         private static void Calculation(int id, int amount)
         {
-            var products = Sales.GetProductsForSelling();
-            Product product = new Product();
+            var products = Products.GetAllProducts();
 
             foreach (var pr in products)
             {
-                product = pr;
-                if (product.Price < 8000)
-                     product.Price -= 500;
-                 else if (product.Price < 20000)
-                     product.Price -= 2000;
-                 else if (product.Price < 50000)
-                     product.Price -= 5000;
-                 else if (product.Price < 80000)
-                     product.Price -= 10000;
                 if (pr.ID == id)
                 {
                     pr.Residue -= amount;
@@ -189,7 +179,7 @@ namespace Market_App.Models
                 switch (option)
                 {
                     case "1":
-                        AddToBasket();
+                        AddToBasket("search");
                         break;
                     case "2":
                         ShowBasket();

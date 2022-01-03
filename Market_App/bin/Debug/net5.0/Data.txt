@@ -1,7 +1,7 @@
 1 Olma 5000 kgs 160 Mevalar
 2 Anor 8000 kgs 100 Mevalar
 3 O'rik 14000 kgs 110 Mevalar
-4 Shaftoli 15000 kgs 90 Mevalar
+4 Shaftoli 18000 kgs 90 Mevalar
 5 Banan 11000 kgs 140 Mevalar
 6 Mandarin 8000 kgs 120 Mevalar
 7 Pepsi 10000 pcs 50 Ichimliklar
@@ -18,4 +18,4 @@
 18 Guruch 12000 kgs 300 Sabzavotlar
 19 Sholg'om 7000 kgs 150 Sabzavotlar
 20 Baqlajon 14000 kgs 55 Sabzavotlar
-21 Anjir 12000 kgs 58 Mevalar
+21 Anjir 12000 kgs 40 Mevalar
