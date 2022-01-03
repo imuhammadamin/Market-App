@@ -5,6 +5,7 @@ using Market_App.Models;
 using System.Collections.Generic;
 using ConsoleTables;
 using System.Data;
+using Market_App.Service;
 
 namespace Market_App.Models
 {
@@ -58,7 +59,7 @@ namespace Market_App.Models
         }
         private static void AddProduct()
         {
-            int count = Products.GetAllProducts().Count + 1;
+            int count = ProductRepository.GetAllProducts().Count + 1;
 
             Console.Write("\nEnter product name: ");
             string productName = Console.ReadLine();
@@ -75,7 +76,7 @@ namespace Market_App.Models
             Console.Write("Enter type: ");
             string type = Console.ReadLine();
 
-            File.AppendAllText(Products.path, count + " " + productName + " " + price + " " + unit + " " + residue + " " + type + Environment.NewLine);
+            File.AppendAllText(Constants.ProductsDbPath, count + " " + productName + " " + price + " " + unit + " " + residue + " " + type + Environment.NewLine);
 
             Console.WriteLine("Product added.\n"); 
             OptionMenu("Add product");
@@ -98,7 +99,7 @@ namespace Market_App.Models
         {
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-            foreach (var product in Products.GetAllProducts())
+            foreach (var product in ProductRepository.GetAllProducts())
             {
                 table.AddRow(product.ID, product.Name, product.Price, product.Unit, product.Residue, product.Type);
             }
@@ -111,13 +112,13 @@ namespace Market_App.Models
             Console.Clear();
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
             
-            foreach (var basket in Basket.GetBasket())
+            foreach (var basket in BasketRepository.GetBasket())
             {
                 table.AddRow(basket.ID, basket.Name, basket.Price, basket.Unit, basket.Residue, basket.Type);
             }
 
             table.Write();
-            if (Basket.GetBasket().Count == 0)
+            if (BasketRepository.GetBasket().Count == 0)
                 OptionMenu("Show all products");
             else OptionMenu("Buy");
         }
@@ -139,12 +140,12 @@ namespace Market_App.Models
                 prod.Residue = amount;
                 prod.Type = pr.Type;
             }
-            Basket.AddToBasket(prod);
+            BasketRepository.AddToBasket(prod);
             ShowProducts();
         }
         private static void Calculation(int id, int amount)
         {
-            var products = Products.GetAllProducts();
+            var products = ProductRepository.GetAllProducts();
 
             foreach (var pr in products)
             {
@@ -210,7 +211,7 @@ namespace Market_App.Models
                         RemoveFromBasket();
                         break;
                     case "3":
-                        Basket.ClearBasket();
+                        BasketRepository.ClearBasket();
                         ShowBasket();
                         break;
                     case "4":
@@ -249,23 +250,23 @@ namespace Market_App.Models
         {
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
-            var product = Basket.GetBasket().Where(x => x.ID.Equals(id));
+            var product = BasketRepository.GetBasket().Where(x => x.ID.Equals(id));
           
             foreach (var pr in product)
             {
                 Calculation(id, pr.Residue);
             }
             
-            Basket.ClearBasket();
+            BasketRepository.ClearBasket();
         }
         private static void RemoveFromBasket()
         {
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
-            foreach(var product in Basket.GetBasket())
+            foreach(var product in BasketRepository.GetBasket())
             {
                 if (product.ID.Equals(id))
-                    if (Basket.RemoveFromBasket(product))
+                    if (BasketRepository.RemoveFromBasket(product))
                         ShowBasket();
                 else
                 {

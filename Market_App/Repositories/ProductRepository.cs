@@ -1,20 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;   
+using System.Collections.Generic;
+using Market_App.Service;
+using Market_App.IModels;
 
 namespace Market_App.Models
 {
-    internal class Products
-    {
-        public static string path = "Data.txt";
-        
+    internal class ProductRepository : IProductRepository
+    {   
         private static IList<Product> _allProducts = new List<Product>();
 
         private static void AddAllProducts()
         {
             _allProducts.Clear();
-            string[] lines = File.ReadAllLines(path).ToArray();
+            string[] lines = File.ReadAllLines(Constants.ProductsDbPath).ToArray();
             int count = 1;
             foreach (string line in lines)
             {

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Market_App.IModels
 {
-    interface IBasket
+    interface IBasketRepository
     {
         private static IList<Product> _basket;
         public static void AddToBasket(Product product) { }

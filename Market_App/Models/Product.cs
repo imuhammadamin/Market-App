@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Market_App.IModels;
 
 namespace Market_App.Models
 {
-    internal class Product : IProduct
+    internal class Product
     {
         public int ID { get; set; }
         public string Name { get; set; }

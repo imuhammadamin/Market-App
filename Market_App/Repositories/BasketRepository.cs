@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Market_App.IModels;
+using Market_App.IRepository;
 
 namespace Market_App.Models
 {
-    internal class Basket : IBasket
+    internal class BasketRepository : IBasketRepository
     {
         private static IList<Product> _basket = new List<Product>();
         public static void AddToBasket(Product product)

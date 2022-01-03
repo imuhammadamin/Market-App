@@ -11,7 +11,7 @@ namespace Market_App.Models
         private static void SellingProducts()
         {
             _sellingProducts.Clear();
-            foreach (Product res in Products.GetAllProducts())
+            foreach (Product res in ProductRepository.GetAllProducts())
             {
                 //res = pr;
                 if (res.Price < 8000)
