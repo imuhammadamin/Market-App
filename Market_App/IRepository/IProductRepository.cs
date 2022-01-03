@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Market_App.IModels
+namespace Market_App.IRepository
 {
     interface IProductRepository
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Market_App.Service;
-using Market_App.IModels;
+using Market_App.IRepository;
 
 namespace Market_App.Models
 {
