@@ -5,7 +5,7 @@ using Market_App.IModels;
 
 namespace Market_App.Models
 {
-    internal class Basket
+    internal class Basket : IBasket
     {
         private static IList<Product> _basket = new List<Product>();
         public static void AddToBasket(Product product)
