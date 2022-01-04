@@ -672,23 +672,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Javlonbek\\.nuget\\packages\\": {},
+    "C:\\Users\\user\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\Market_App.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Source\\Repos\\Market-App\\Market_App\\Market_App.csproj",
       "projectName": "Market_App",
-      "projectPath": "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\Market_App.csproj",
-      "packagesPath": "C:\\Users\\Javlonbek\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\obj\\",
+      "projectPath": "C:\\Users\\user\\Source\\Repos\\Market-App\\Market_App\\Market_App.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\user\\Source\\Repos\\Market-App\\Market_App\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Javlonbek\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -735,7 +735,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }
