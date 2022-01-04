@@ -21,7 +21,7 @@ namespace Market_App.Models
 
         public User Login(string login, string password)
         {
-            string[] files = Directory.GetFiles(Constants.UserDbPath);
+            string[] files = Directory.GetFiles(Constants.UsersDbPath);
 
             foreach (string file in files)
             {
