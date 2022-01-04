@@ -23,9 +23,9 @@ namespace Market_App.Models
                 {
                     ID = int.Parse(prod[0]),
                     Name = prod[1],
-                    Price = int.Parse(prod[2]),
+                    Price = double.Parse(prod[2]),
                     Unit = prod[3],
-                    Residue = int.Parse(prod[4]),
+                    Residue = float.Parse(prod[4]),
                     Type = prod[5]
                 });
                 count++;

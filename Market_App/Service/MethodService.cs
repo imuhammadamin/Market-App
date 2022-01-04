@@ -11,7 +11,7 @@ namespace Market_App.Service
     {
         public static string GetUserPath(Guid Id)
         {
-            return Path.Combine(Constants.UserDbPath, Id.ToString() + ".txt");
+            return Path.Combine(Constants.UsersDbPath, Id.ToString() + ".txt");
         }
     }
 }

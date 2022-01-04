@@ -67,7 +67,7 @@ namespace Market_App.Models
             Console.Write("Enter price: ");
             int price = int.Parse(Console.ReadLine());
 
-            Console.Write("Enter unit: ");
+            Console.Write("Enter unit[pcs or kgs]: ");
             string unit = Console.ReadLine();
 
             Console.Write("Enter residue: ");
@@ -83,17 +83,36 @@ namespace Market_App.Models
         }
         private static void SearchProduct()
         {
-            Console.Write("\nEnter the product name: ");
-            string nameProduct = Console.ReadLine();
-            string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
-            var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
-            var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
+            try
+            {
+                Console.Write("\nEnter the product name: ");
+                string nameProduct = Console.ReadLine();
+                string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
+                var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
+                var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-            foreach (var pr in prod)
-                table.AddRow(pr.ID, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
+                foreach (var pr in prod)
+                    table.AddRow(pr.ID, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
 
-            table.Write();
-            OptionMenu("Add to Basket");
+                Console.Clear();
+
+                table.Write();
+                if (table.Rows.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nProduct not found! Please search again.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    OptionMenu("Search again");
+                }
+                else OptionMenu("Search");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nInput error! Please enter again.");
+                Console.ForegroundColor = ConsoleColor.White;
+                SearchProduct();
+            }
         }
         private static void UpdateProduct()
         {
@@ -122,39 +141,71 @@ namespace Market_App.Models
                 OptionMenu("Show all products");
             else OptionMenu("Buy");
         }
-        private static void AddToBasket(string opt)
+        private static void AddToBasket(string type)
         {
-            Console.Write("Enter №: ");
-            int id = int.Parse(Console.ReadLine());
-            var product = Sales.GetProductsForSelling().Where(x => x.ID.Equals(id));
-            Product prod = new Product();
-
-            Console.Write("Enter the amount you want to buy: ");
-            int amount = int.Parse(Console.ReadLine());
-            foreach(var pr in product)
+            try
             {
-                prod.ID = pr.ID;
-                prod.Name = pr.Name;
-                prod.Price = pr.Price;
-                prod.Unit = pr.Unit;
-                prod.Residue = amount;
-                prod.Type = pr.Type;
+                Console.Write("Enter №: ");
+                int id = int.Parse(Console.ReadLine());
+
+                var product = Sales.GetProductsForSelling().Where(x => x.ID.Equals(id));
+                Product prod = new Product();
+                if(id > ProductRepository.GetAllProducts().Count ||
+                    id <= ProductRepository.GetAllProducts().Count - ProductRepository.GetAllProducts().Count)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nNo such product available!\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                    AddToBasket("");
+                }
+                Console.Write("Enter the amount you want to buy: ");
+                float amount = float.Parse(Console.ReadLine());
+                    foreach (var pr in product)
+                    {
+                        prod.ID = pr.ID;
+                        prod.Name = pr.Name;
+                        prod.Price = pr.Price;
+                        prod.Unit = pr.Unit;
+                        prod.Residue = pr.Residue;
+                        prod.Type = pr.Type;
+                        if (amount <= prod.Residue && amount > 0)
+                        {
+                            prod.Residue = amount;
+                            BasketRepository.AddToBasket(prod);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("\nThis amount of product is not available\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+
+                            AddToBasket("");
+                        }
+                    }
+
+                if (type == "Search again")
+                    OptionMenu(type);
+                else ShowProducts();
             }
-            BasketRepository.AddToBasket(prod);
-            ShowProducts();
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nInput error! Please enter again.\n");
+                Console.ForegroundColor= ConsoleColor.White;
+                AddToBasket("");
+            }
         }
-        private static void Calculation(int id, int amount)
+        private static void Calculation(int id, float amount)
         {
             var products = ProductRepository.GetAllProducts();
 
             foreach (var pr in products)
             {
-                if (pr.ID == id)
-                {
+                if(pr.ID == id)
                     pr.Residue -= amount;
-                }
             }
-            using (TextWriter tw = new StreamWriter("Data.txt"))
+            using (TextWriter tw = new StreamWriter(Constants.ProductsDbPath))
             {
                 for (int i = 0; i < products.Count; i++)
                     tw.WriteLine(
@@ -172,24 +223,28 @@ namespace Market_App.Models
             Console.WriteLine($"1. {firstOption}");
             if (firstOption == "Add to Basket")
             {
-                Console.WriteLine("2. Show Basket");
-                Console.WriteLine("3. Back to Menu");
+                Console.WriteLine("2. Search products");
+                Console.WriteLine("3. Show Basket");
+                Console.WriteLine("4. Back to Menu");
                 Console.Write("Enter option: ");
 
                 string option = Console.ReadLine();
                 switch (option)
                 {
                     case "1":
-                        AddToBasket("search");
+                        AddToBasket("");
                         break;
                     case "2":
-                        ShowBasket();
+                        SearchProduct();
                         break;
                     case "3":
+                        ShowBasket();
+                        break;
+                    case "4":
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("Please enter only 1, 2 or 3!");
+                        Console.WriteLine("Please enter only 1, 2, 3 or 4!");
                         OptionMenu(firstOption);
                         break;
                 }
@@ -223,6 +278,62 @@ namespace Market_App.Models
                         break;
                 }
             }
+            else if (firstOption == "Search")
+            {
+                Console.WriteLine("2. Add to Basket");
+                Console.WriteLine("3. Show all products");
+                Console.WriteLine("4. Show Basket");
+                Console.WriteLine("5. Back to Menu");
+                Console.Write("Enter option: ");
+
+                string option = Console.ReadLine();
+                switch (option)
+                {
+                    case "1":
+                        SearchProduct();
+                        break;
+                    case "2":
+                        AddToBasket(firstOption);
+                        break;
+                    case "3":
+                        ShowProducts();
+                        break;
+                    case "4":
+                        ShowBasket();
+                        break;
+                    case "5":
+                        Execute();
+                        break;
+                    default:
+                        Console.WriteLine("Please enter only 1, 2, 3, 4 or 5!");
+                        OptionMenu(firstOption);
+                        break;
+                }
+            }
+            else if (firstOption == "Search again")
+            {
+                Console.WriteLine("2. Show all products");
+                Console.WriteLine("3. Back to Menu");
+                Console.Write("Enter option: ");
+
+                string option = Console.ReadLine();
+                switch (option)
+                {
+                    case "1":
+                        SearchProduct();
+                        break;
+                    case "2":
+                        ShowProducts();
+                        break;
+                    case "3":
+                        Execute();
+                        break;
+                    default:
+                        Console.WriteLine("Please enter only 1, 2 or 3!");
+                        OptionMenu(firstOption);
+                        break;
+                }
+            }
             else
             {
                 Console.WriteLine("2. Back to Menu");
@@ -248,16 +359,42 @@ namespace Market_App.Models
         }
         private static void Buy()
         {
-            Console.Write("Enter №: ");
-            int id = int.Parse(Console.ReadLine());
-            var product = BasketRepository.GetBasket().Where(x => x.ID.Equals(id));
-          
-            foreach (var pr in product)
+            Console.Write("Do you want to buy all the products?[y, n]: ");
+            string choose = Console.ReadLine();
+
+            if (choose == "y" || choose == "Y")
             {
-                Calculation(id, pr.Residue);
+                var product = BasketRepository.GetBasket();
+
+                foreach (var pr in product)
+                {
+                    Calculation(pr.ID, pr.Residue);
+                }
+
+                BasketRepository.ClearBasket();
+
+                Console.Clear();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Thank you for your purchase!");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.WriteLine("Want to buy again?[y, n]");
+                string choose1 = Console.ReadLine();
+                if (choose1 == "y" || choose1 == "Y")
+                    ShowProducts();
+                else
+                    Environment.Exit(0);
+            }
+            else if (choose == "n" || choose == "N") OptionMenu("Buy");
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You are entered error! Please enter again.");
+                Console.ForegroundColor = ConsoleColor.White;
+                Buy();
             }
             
-            BasketRepository.ClearBasket();
         }
         private static void RemoveFromBasket()
         {
