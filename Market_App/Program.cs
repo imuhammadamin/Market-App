@@ -35,7 +35,7 @@ namespace Market_App
                     }
                     else
                     {
-                        Console.WriteLine("\n1.Try again\t|\t2.Exit ");
+                        Console.WriteLine("\nNot Found!\n1.Try again\t|\t2.Exit ");
                         Console.Write("Select: ");
                         string AgainOrExit = Console.ReadLine();
 
