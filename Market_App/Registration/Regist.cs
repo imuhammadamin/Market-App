@@ -34,36 +34,32 @@ namespace Market_App.Registration
 
 
                     User user = userRepo.Login(login, password);
-                    if (login == user.Login && password == user.Password)
+                    if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
                     {
                         CommerceAdmin.Execute();
                     }
-                    
+
+                    else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
+                    {
+                        CommerceUser.Execute();
+                    }
                     else
                     {
-                        if (user != null)
+                        Console.WriteLine("\nNot Found!\n1.Try again\t|\t2.Exit ");
+                        Console.Write("Select: ");
+                        string AgainOrExit = Console.ReadLine();
+
+                        if (AgainOrExit == "1")
                         {
-                            CommerceUser.Execute();
+                            Console.Clear();
+                            goto BackTo;
                         }
-                        else
-                        {
-                            Console.WriteLine("\nNot Found!\n1.Try again\t|\t2.Exit ");
-                            Console.Write("Select: ");
-                            string AgainOrExit = Console.ReadLine();
 
-                            if (AgainOrExit == "1")
-                            {
-                                Console.Clear();
-                                goto BackTo;
-                            }
+                        else if (AgainOrExit == "2")
+                            Environment.Exit(0);
 
-                            else if (AgainOrExit == "2")
-                                Environment.Exit(0);
-
-                        }
                     }
                     break;
-
 
                 case "2":
                     Console.Write("Name: ");
