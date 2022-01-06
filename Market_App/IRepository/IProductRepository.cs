@@ -12,5 +12,6 @@ namespace Market_App.IRepository
         private static void AddAllProducts() { }
 
         public static IList<Product> GetAllProducts() { return _allProducts; }
+        public static bool RemoveProduct() { return false; }
     }
 }

@@ -10,40 +10,72 @@ namespace Market_App.Models
 {
     internal class UserRepository : IUserRepository
     {
-        public User Create(User user)
+        private static DbContextApp _Db = new DbContextApp();
+        private static IList<User> _allUsers;
+        private static IList<User> _users = _Db.Users.Where(x => x.Role == UserRole.User).ToList();
+        private static IList<User> _admins = _Db.Users.Where(x => x.Role == UserRole.Admin).ToList();
+        public void Create(User user)
         {
-            string fileName = MethodService.GetUserPath(user.Id);
-            string userData = user.ToString();
-            File.WriteAllText(fileName, userData);
+            _Db.Users.Add(user);
+            _Db.SaveChanges();
+        }
+        public IList<User> GetAllUsers()
+        {
+            _allUsers = _Db.Users.ToList();
+            return _allUsers;
+        }
 
-            return user;
+        public IList<User> GetUsers()
+        {
+            return _users;
+        }
+
+        public IList<User> GetAdmins()
+        {
+            return _admins;
         }
 
         public User Login(string login, string password)
         {
-            string[] files = Directory.GetFiles(Constants.UsersDbPath);
-
-            foreach (string file in files)
+            var user = _Db.Users.Where(x => x.Login == login && x.Password == password).FirstOrDefault();
+            if (user != null)
             {
-                string[] userDetails = File.ReadAllLines(file);
-                string userLogin = userDetails[4];
-                string userPassword = userDetails[5];
-
-                if (login == userLogin && password == userPassword)
-                {
-                    return new User
-                    {
-                        Id = Guid.Parse(userDetails[0]),
-                        FirstName = userDetails[1],
-                        LastName = userDetails[2],
-                        Role = (UserRole)Enum.Parse(typeof(UserRole), userDetails[3]),
-                        Login = userDetails[4],
-                        Password = userDetails[5]
-                    };
-                }
+                return user;
             }
-
             return null;
+        }
+
+        public void EditUser(User user)
+        {
+            var us = _allUsers.Where(x => x.Id == user.Id).FirstOrDefault();
+            if(us != null)
+            {
+                us.FirstName = user.FirstName;
+                us.LastName = user.LastName;
+                us.Role = user.Role;
+                us.Login = user.Login;
+                us.Password = user.Password;
+            }
+            else
+            {
+                CommerceUser.Execute();
+            }
+            _Db.Users.UpdateRange(_allUsers);
+            _Db.SaveChanges();
+        }
+
+        public void RemoveUser(User user)
+        {
+            var us = _allUsers.Where(x => x.Id == user.Id).ToList().FirstOrDefault();
+            if (us != null)
+            {
+                _Db.Users.Remove(us);
+            }
+            else
+            {
+                CommerceUser.Execute();
+            }
+            _Db.SaveChanges();
         }
     }
 }

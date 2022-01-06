@@ -8,7 +8,12 @@ namespace Market_App.IRepository
 {
     interface IUserRepository
     {
-        User Create(User user);
+        void Create(User user);
+        public IList<User> GetAllUsers();
+        public IList<User> GetUsers();
+        public IList<User> GetAdmins();
         User Login(string login, string password);
+        public void EditUser(User user);
+        public void RemoveUser(User user);
     }
 }

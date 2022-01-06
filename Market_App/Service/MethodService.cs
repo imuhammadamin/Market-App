@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Market_App.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,9 +10,6 @@ namespace Market_App.Service
 {
     internal class MethodService
     {
-        public static string GetUserPath(Guid Id)
-        {
-            return Path.Combine(Constants.UsersDbPath, Id.ToString() + ".txt");
-        }
+        public static string GetUserPath() { return null; }
     }
 }
