@@ -52,7 +52,7 @@ namespace Market_App.Models
             table.Write();
             OptionMenu("Add to Basket");
         }
-        
+
         private static void AddProduct()
         {
             int count = ProductRepository.GetAllProducts().Count + 1;
@@ -74,10 +74,10 @@ namespace Market_App.Models
 
             File.AppendAllText(Constants.ProductsDbPath, count + " " + productName + " " + price + " " + unit + " " + residue + " " + type + Environment.NewLine);
 
-            Console.WriteLine("Product added.\n"); 
+            Console.WriteLine("Product added.\n");
             OptionMenu("Add product");
         }
-        
+
         private static void SearchProduct()
         {
             try
@@ -88,12 +88,12 @@ namespace Market_App.Models
                 var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
                 var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-                
-            foreach (var pr in prod)
-                table.AddRow(pr.Id, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
-                
+
                 foreach (var pr in prod)
-                    table.AddRow(pr.ID, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
+                    table.AddRow(pr.Id, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
+
+                foreach (var pr in prod)
+                    table.AddRow(pr.Id, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
 
                 Console.Clear();
 
@@ -132,29 +132,14 @@ namespace Market_App.Models
         }
         private static void AddToBasket(string type)
         {
-            Console.Write("Enter №: ");
-            int id = int.Parse(Console.ReadLine());
-            var product = Sales.GetProductsForSelling().Where(x => x.Id.Equals(id));
-            Product prod = new Product();
-
-            Console.Write("Enter the amount you want to buy: ");
-            int amount = int.Parse(Console.ReadLine());
-            foreach (var pr in product)
-            {
-                prod.Id = pr.Id;
-                prod.Name = pr.Name;
-                prod.Price = pr.Price;
-                prod.Unit = pr.Unit;
-                prod.Residue = amount;
-                prod.Type = pr.Type;
             try
             {
                 Console.Write("Enter №: ");
                 int id = int.Parse(Console.ReadLine());
 
-                var product = Sales.GetProductsForSelling().Where(x => x.ID.Equals(id));
+                var product = Sales.GetProductsForSelling().Where(x => x.Id.Equals(id));
                 Product prod = new Product();
-                if(id > ProductRepository.GetAllProducts().Count ||
+                if (id > ProductRepository.GetAllProducts().Count ||
                     id <= ProductRepository.GetAllProducts().Count - ProductRepository.GetAllProducts().Count)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -165,28 +150,28 @@ namespace Market_App.Models
                 }
                 Console.Write("Enter the amount you want to buy: ");
                 float amount = float.Parse(Console.ReadLine());
-                    foreach (var pr in product)
+                foreach (var pr in product)
+                {
+                    prod.Id = pr.Id;
+                    prod.Name = pr.Name;
+                    prod.Price = pr.Price;
+                    prod.Unit = pr.Unit;
+                    prod.Residue = pr.Residue;
+                    prod.Type = pr.Type;
+                    if (amount <= prod.Residue && amount > 0)
                     {
-                        prod.ID = pr.ID;
-                        prod.Name = pr.Name;
-                        prod.Price = pr.Price;
-                        prod.Unit = pr.Unit;
-                        prod.Residue = pr.Residue;
-                        prod.Type = pr.Type;
-                        if (amount <= prod.Residue && amount > 0)
-                        {
-                            prod.Residue = amount;
-                            BasketRepository.AddToBasket(prod);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("\nThis amount of product is not available\n");
-                            Console.ForegroundColor = ConsoleColor.White;
-
-                            AddToBasket("");
-                        }
+                        prod.Residue = amount;
+                        BasketRepository.AddToBasket(prod);
                     }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nThis amount of product is not available\n");
+                        Console.ForegroundColor = ConsoleColor.White;
+
+                        AddToBasket("");
+                    }
+                }
 
                 if (type == "Search again")
                     OptionMenu(type);
@@ -196,27 +181,25 @@ namespace Market_App.Models
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nInput error! Please enter again.\n");
-                Console.ForegroundColor= ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.White;
                 AddToBasket("");
             }
-        }
-        
-        public static void OptionMenu(string firstOption)
             
+        }
         private static void Calculation(int id, float amount)
         {
             var products = ProductRepository.GetAllProducts();
 
             foreach (var pr in products)
             {
-                if(pr.ID == id)
+                if (pr.Id == id)
                     pr.Residue -= amount;
             }
             using (TextWriter tw = new StreamWriter(Constants.ProductsDbPath))
             {
                 for (int i = 0; i < products.Count; i++)
                     tw.WriteLine(
-                          products[i].ID + " "
+                          products[i].Id + " "
                         + products[i].Name + " "
                         + products[i].Price + " "
                         + products[i].Unit + " "
@@ -379,11 +362,11 @@ namespace Market_App.Models
 
             if (choose == "y" || choose == "Y")
             {
-                var product = BasketRepository.GetBasket();
+                var prod = BasketRepository.GetBasket();
 
-                foreach (var pr in product)
+                foreach (var pr in prod)
                 {
-                    Calculation(pr.ID, pr.Residue);
+                    Calculation(pr.Id, pr.Residue);
                 }
 
                 BasketRepository.ClearBasket();
@@ -409,7 +392,7 @@ namespace Market_App.Models
                 Console.ForegroundColor = ConsoleColor.White;
                 Buy();
             }
-            
+
         }
         private static void RemoveFromBasket()
         {
