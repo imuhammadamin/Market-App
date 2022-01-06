@@ -15,7 +15,8 @@ namespace Market_App
         static void Main(string[] args)
         {
             
-            Regist.Sign();
+            Regist execute = new Regist();
+            execute.Execute();
 
         }
    

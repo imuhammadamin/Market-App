@@ -16,35 +16,38 @@ namespace Market_App.Models
     {
         private static IUserRepository userRepo = new UserRepository();
         private static IList<User> Users = userRepo.GetAllUsers();
-        private static IList<User> Admins = userRepo.GetAdmins();
         private static IList<Product> products = ProductRepository.GetAllProducts();
+        private static Registration.Regist regist = new Registration.Regist();
         public static void Execute()
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("1. Browse all products | 2. Add product | 3. Update product | 4. Add Admin | 5. Show all admins | 6. Exit");
+                Console.WriteLine("1. Browse all products | 2. Add product | 3. Update product | 4. Add Admin | 5. Show all admins | 6. Back | 7. Exit");
                 Console.Write("Enter your option: ");
-                int option = int.Parse(Console.ReadLine());
+                string choose = Console.ReadLine();
 
-                switch (option)
+                switch (choose)
                 {
-                    case 1:
+                    case "1":
                         ShowProducts();
                         break;
-                    case 2:
+                    case "2":
                         AddProduct();
                         break;
-                    case 3:
+                    case "3":
                         UpdateProduct();
                         break;
-                    case 4:
+                    case "4":
                         AddAdmin();
                         break;
-                    case 5:
-                        ShowAllAdmins();
+                    case "5":
+                        ShowUsers();
                         break;
-                    case 6:
+                    case "6":
+                        regist.Execute();
+                        break;
+                    case "7":
                         Environment.Exit(0);
                         break;
                     default:
@@ -95,7 +98,7 @@ namespace Market_App.Models
 
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-            foreach (var product in Sales.GetProductsForSelling())
+            foreach (var product in products)
             {
                 table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
             }
@@ -152,7 +155,7 @@ namespace Market_App.Models
 
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-            foreach (var product in Sales.GetProductsForSelling())
+            foreach (var product in products)
             {
                 table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
             }
@@ -316,7 +319,7 @@ namespace Market_App.Models
                         break;
                 }
             }
-            else if (option == "Show all admins")
+            else if (option == "Show all users")
             {
                 Console.Clear();
 
@@ -335,10 +338,10 @@ namespace Market_App.Models
                         AddAdmin();
                         break;
                     case "2":
-                        EditAdmin(table);
+                        EditUser(table);
                         break;
                     case "3":
-                        DeleteAdmin(table);
+                        DeleteUser(table);
                         break;
                     case "4":
                         Execute();
@@ -400,11 +403,11 @@ namespace Market_App.Models
                         break;
                 }
                 ProductRepository.Update(product);
-                ShowProducts();
+                UpdateProduct();
 
             }
         }
-        private static void ShowAllAdmins()
+        private static void ShowUsers()
         {
             var users = userRepo.GetAllUsers();
 
@@ -415,9 +418,9 @@ namespace Market_App.Models
                 table.AddRow(user.Id, user.FirstName, user.LastName, user.Role, user.Login, user.Password);
             }
 
-            OptionMenu("Show all admin", table);
+            OptionMenu("Show all users", table);
         }
-        private static void EditAdmin(ConsoleTable table)
+        private static void EditUser(ConsoleTable table)
         {
             Console.Clear();
 
@@ -426,7 +429,7 @@ namespace Market_App.Models
             Console.Write("\nEnter №: ");
             int id = int.Parse(Console.ReadLine());
 
-            var admin = Admins.Where(x => x.Id.Equals(id)).FirstOrDefault();
+            var admin = Users.Where(x => x.Id.Equals(id)).FirstOrDefault();
 
             Console.Clear();
             table.Write();
@@ -455,18 +458,15 @@ namespace Market_App.Models
                         Console.Write("Enter residue: ");
                         admin.Password = Console.ReadLine();
                         break;
-                    case 5:
-                        UpdateProduct(table);
-                        break;
                     default:
-                        EditProduct(table);
+                        EditUser(table);
                         break;
                 }
                 userRepo.EditUser(admin);
-                ShowProducts();
+                ShowUsers();
             }
         }
-        private static void DeleteAdmin(ConsoleTable table)
+        private static void DeleteUser(ConsoleTable table)
         {
             Console.Clear();
 
@@ -475,16 +475,16 @@ namespace Market_App.Models
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
 
-            var admin = Admins.Where(x => x.Id == id).FirstOrDefault();
+            var admin = Users.Where(x => x.Id == id).FirstOrDefault();
             if (admin != null)
             {
                 userRepo.RemoveUser(admin);
-                ShowProducts();
+                ShowUsers();
             }
             else
             {
                 Console.WriteLine("Such a product is not available in the basket!");
-                DeleteProduct(table);
+                DeleteUser(table);
             }
         }
     }

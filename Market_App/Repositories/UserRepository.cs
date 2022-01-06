@@ -11,7 +11,7 @@ namespace Market_App.Models
     internal class UserRepository : IUserRepository
     {
         private static DbContextApp _Db = new DbContextApp();
-        private static IList<User> _allUsers;
+        private static IList<User> _allUsers = _Db.Users.ToList();
         private static IList<User> _users = _Db.Users.Where(x => x.Role == UserRole.User).ToList();
         private static IList<User> _admins = _Db.Users.Where(x => x.Role == UserRole.Admin).ToList();
         public void Create(User user)
@@ -66,10 +66,9 @@ namespace Market_App.Models
 
         public void RemoveUser(User user)
         {
-            var us = _allUsers.Where(x => x.Id == user.Id).ToList().FirstOrDefault();
-            if (us != null)
+            if (user != null)
             {
-                _Db.Users.Remove(us);
+                _Db.Users.Remove(user);
             }
             else
             {
