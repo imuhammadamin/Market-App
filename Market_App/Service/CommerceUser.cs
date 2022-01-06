@@ -52,8 +52,7 @@ namespace Market_App.Models
             table.Write();
             OptionMenu("Add to Basket");
         }
-<<<<<<< HEAD:Market_App/Service/CommerceUser.cs
-=======
+        
         private static void AddProduct()
         {
             int count = ProductRepository.GetAllProducts().Count + 1;
@@ -78,7 +77,7 @@ namespace Market_App.Models
             Console.WriteLine("Product added.\n"); 
             OptionMenu("Add product");
         }
->>>>>>> c4b117fddbe0173f59c41ec95074345dd9e0372a:Market_App/Service/Commerce.cs
+        
         private static void SearchProduct()
         {
             try
@@ -89,13 +88,12 @@ namespace Market_App.Models
                 var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
                 var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-<<<<<<< HEAD:Market_App/Service/CommerceUser.cs
+                
             foreach (var pr in prod)
                 table.AddRow(pr.Id, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
-=======
+                
                 foreach (var pr in prod)
                     table.AddRow(pr.ID, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
->>>>>>> c4b117fddbe0173f59c41ec95074345dd9e0372a:Market_App/Service/Commerce.cs
 
                 Console.Clear();
 
@@ -134,7 +132,6 @@ namespace Market_App.Models
         }
         private static void AddToBasket(string type)
         {
-<<<<<<< HEAD:Market_App/Service/CommerceUser.cs
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
             var product = Sales.GetProductsForSelling().Where(x => x.Id.Equals(id));
@@ -150,7 +147,6 @@ namespace Market_App.Models
                 prod.Unit = pr.Unit;
                 prod.Residue = amount;
                 prod.Type = pr.Type;
-=======
             try
             {
                 Console.Write("Enter №: ");
@@ -202,13 +198,11 @@ namespace Market_App.Models
                 Console.WriteLine("\nInput error! Please enter again.\n");
                 Console.ForegroundColor= ConsoleColor.White;
                 AddToBasket("");
->>>>>>> c4b117fddbe0173f59c41ec95074345dd9e0372a:Market_App/Service/Commerce.cs
             }
         }
-<<<<<<< HEAD:Market_App/Service/CommerceUser.cs
         
         public static void OptionMenu(string firstOption)
-=======
+            
         private static void Calculation(int id, float amount)
         {
             var products = ProductRepository.GetAllProducts();
@@ -232,7 +226,6 @@ namespace Market_App.Models
 
         }
         private static void OptionMenu(string firstOption)
->>>>>>> c4b117fddbe0173f59c41ec95074345dd9e0372a:Market_App/Service/Commerce.cs
         {
             Console.WriteLine($"1. {firstOption}");
             if (firstOption == "Add to Basket")
@@ -371,7 +364,6 @@ namespace Market_App.Models
         }
         private static void Buy()
         {
-<<<<<<< HEAD:Market_App/Service/CommerceUser.cs
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
             var product = BasketRepository.GetBasket().Where(x => x.Id.Equals(id));
@@ -382,7 +374,6 @@ namespace Market_App.Models
             }
 
             BasketRepository.ClearBasket();
-=======
             Console.Write("Do you want to buy all the products?[y, n]: ");
             string choose = Console.ReadLine();
 
@@ -419,7 +410,6 @@ namespace Market_App.Models
                 Buy();
             }
             
->>>>>>> c4b117fddbe0173f59c41ec95074345dd9e0372a:Market_App/Service/Commerce.cs
         }
         private static void RemoveFromBasket()
         {
