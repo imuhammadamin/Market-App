@@ -20,7 +20,7 @@ namespace Market_App.Models
             {
                 Console.Clear();
 
-                Console.WriteLine("1. Browse all products | 2. Search product | 3. Basket | 4. Back | 5. Exit");
+                Console.WriteLine("1. Browse all products | 2. Search product | 3. Basket | 4. Log out | 5. Exit");
 
                 Console.Write("\n> ");
 
