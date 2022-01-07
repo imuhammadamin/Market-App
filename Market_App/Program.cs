@@ -16,7 +16,7 @@ namespace Market_App
         {
             
             Regist execute = new Regist();
-            execute.Execute();
+            execute.Menu();
 
         }
    

@@ -85,30 +85,45 @@ namespace Market_App.Registration
 
 
             User user = userRepo.Login(login, password);
-            if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
+            try
             {
-                AdminPanel.Execute();
-            }
-
-            else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
-            {
-                ClientPanel.Execute();
-            }
-            else
-            {
-                Console.WriteLine("\nNot Found!\n1.Try again\t|\t2.Exit ");
-                Console.Write("> ");
-                string choose = Console.ReadLine();
-
-                if (choose == "1")
+                if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
                 {
-                    Console.Clear();
-                    Menu();
+                    AdminPanel.Execute();
                 }
 
-                else if (choose == "2")
-                    Environment.Exit(0);
+                else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
+                {
+                    ClientPanel.Execute();
+                }
 
+            }
+            catch
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("There is no such user!");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.WriteLine("1. Try again | 2. Sig Up | 3. Exit ");
+                Console.Write("\n> ");
+                string opt = Console.ReadLine();
+
+                switch (opt)
+                {
+                    case "1":
+                        Menu();
+                        break;
+                    case "2":
+                        SignUp();
+                        break;
+                    case "3":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Menu();
+                        break;
+                }
             }
 
         }

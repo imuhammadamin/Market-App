@@ -24,7 +24,7 @@ namespace Market_App.Models
             {
                 Console.Clear();
                 Console.WriteLine("1. Browse all products | 2. Add product | 3. Update product | 4. Add Admin | 5. Show all admins | 6. Back | 7. Exit");
-                Console.Write("Enter your option: ");
+                Console.Write("> ");
                 string choose = Console.ReadLine();
 
                 switch (choose)
