@@ -12,7 +12,6 @@ namespace Market_App.Service
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Product> Pr { get; set; } 
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
