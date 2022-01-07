@@ -13,9 +13,16 @@ namespace Market_App.Models
 {
     internal class ClientPanel
     {
-        private static Regist menu = new Regist();
-        public static void Execute()
+        static IProductRepository productRepo = new ProductRepository();
+
+        static Sales sales = new Sales();
+
+        static Regist regist = new Regist();
+
+        IBasketRepository basketRepository = new BasketRepository();
+        public void Execute()
         {
+
             while (true)
             {
                 Console.Clear();
@@ -38,7 +45,7 @@ namespace Market_App.Models
                         ShowBasket();
                         break;
                     case "4":
-                        menu.Menu();
+                        regist.Menu();
                         break;
                     case "5":
                         Environment.Exit(0);
@@ -47,13 +54,14 @@ namespace Market_App.Models
             }
         }
 
-        private static void ShowProducts()
+        private void ShowProducts()
         {
+
             Console.Clear();
 
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-            foreach (var product in Sales.GetProductsForSelling())
+            foreach (var product in sales.GetProductsForSelling())
             {
                 table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
             }
@@ -62,14 +70,14 @@ namespace Market_App.Models
             OptionMenu("Add to Basket");
         }
 
-        private static void SearchProduct()
+        private void SearchProduct()
         {
             try
             {
                 Console.Write("\nEnter the product name: ");
                 string nameProduct = Console.ReadLine();
                 string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
-                var prod = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
+                var prod = sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
                 var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
                 foreach (var pr in prod)
@@ -87,7 +95,7 @@ namespace Market_App.Models
                 }
                 else OptionMenu("Search");
             }
-            catch (Exception ex)
+            catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nInput error! Please enter again.");
@@ -96,7 +104,7 @@ namespace Market_App.Models
             }
         }
 
-        private static void ShowBasket()
+        private void ShowBasket()
         {
             Console.Clear();
 
@@ -105,7 +113,7 @@ namespace Market_App.Models
             float summ = 0;
             decimal summPrice = 0;
 
-            foreach (var basket in BasketRepository.GetBasket())
+            foreach (var basket in basketRepository.GetBasket())
             {
                 table.AddRow(basket.Id, basket.Name, basket.Price, basket.Unit, basket.Residue, basket.Type);
                 summ = (float)basket.Price * basket.Residue;
@@ -115,19 +123,19 @@ namespace Market_App.Models
 
             table.Write();
 
-            if (BasketRepository.GetBasket().Count == 0)
+            if (basketRepository.GetBasket().Count == 0)
                 OptionMenu("Show all products");
             else OptionMenu("Buy");
         }
 
-        private static void AddToBasket(string type)
+        private void AddToBasket(string type)
         {
             try
             {
                 Console.Write("Enter №: ");
                 int id = int.Parse(Console.ReadLine());
 
-                var product = Sales.GetProductsForSelling().Where(x => x.Id.Equals(id)).FirstOrDefault();
+                var product = sales.GetProductsForSelling().Where(x => x.Id.Equals(id)).FirstOrDefault();
 
                 Product prod = new Product();
                 
@@ -155,7 +163,7 @@ namespace Market_App.Models
                 {
                     prod.Residue = amount;
 
-                    BasketRepository.AddToBasket(prod);
+                    basketRepository.AddToBasket(prod);
                 }
                 else
                 {
@@ -181,9 +189,10 @@ namespace Market_App.Models
             
         }
 
-        private static void Calculation(int id, float amount)
+        private void Calculation(int id, float amount)
         {
-            var products = ProductRepository.GetAllProducts();
+
+            var products = productRepo.GetAllProducts();
 
             foreach (var pr in products)
             {
@@ -205,7 +214,7 @@ namespace Market_App.Models
 
         }
 
-        private static void OptionMenu(string firstOption)
+        private void OptionMenu(string firstOption)
         {
 
             Console.WriteLine($"1. {firstOption}");
@@ -257,7 +266,7 @@ namespace Market_App.Models
                         RemoveFromBasket();
                         break;
                     case "3":
-                        BasketRepository.ClearBasket();
+                        basketRepository.ClearBasket();
                         ShowBasket();
                         break;
                     case "4":
@@ -351,20 +360,20 @@ namespace Market_App.Models
             }
         }
 
-        private static void Buy()
+        private void Buy()
         {
             Console.Write("Enter №: ");
 
             int id = int.Parse(Console.ReadLine());
 
-            var product = BasketRepository.GetBasket().Where(x => x.Id.Equals(id));
+            var product = basketRepository.GetBasket().Where(x => x.Id.Equals(id));
 
             foreach (var pr in product)
             {
-                ProductRepository.Calculation(id, pr.Residue);
+                productRepo.Calculation(id, pr.Residue);
             }
 
-            BasketRepository.ClearBasket();
+            basketRepository.ClearBasket();
 
             Console.Write("Do you want to buy all the products?[y, n]: ");
 
@@ -372,14 +381,14 @@ namespace Market_App.Models
 
             if (choose == "y" || choose == "Y")
             {
-                var prod = BasketRepository.GetBasket();
+                var prod = basketRepository.GetBasket();
 
                 foreach (var pr in prod)
                 {
                     Calculation(pr.Id, pr.Residue);
                 }
 
-                BasketRepository.ClearBasket();
+                basketRepository.ClearBasket();
 
                 Console.Clear();
 
@@ -409,16 +418,16 @@ namespace Market_App.Models
 
         }
 
-        private static void RemoveFromBasket()
+        private void RemoveFromBasket()
         {
             Console.Write("Enter №: ");
 
             int id = int.Parse(Console.ReadLine());
 
-            foreach (var product in BasketRepository.GetBasket())
+            foreach (var product in basketRepository.GetBasket())
             {
                 if (product.Id.Equals(id))
-                    if (BasketRepository.RemoveFromBasket(product))
+                    if (basketRepository.RemoveFromBasket(product))
                         ShowBasket();
                     else
                     {

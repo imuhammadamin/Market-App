@@ -14,10 +14,8 @@ namespace Market_App
     {
         static void Main(string[] args)
         {
-            
-            Regist execute = new Regist();
-            execute.Menu();
-
+            Regist regist = new Regist();
+            regist.Menu();
         }
    
     }

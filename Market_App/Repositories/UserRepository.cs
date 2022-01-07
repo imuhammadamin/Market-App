@@ -10,29 +10,27 @@ namespace Market_App.Models
 {
     internal class UserRepository : IUserRepository
     {
-        private static DbContextApp _Db = new DbContextApp();
-        private static IList<User> _allUsers = _Db.Users.ToList();
-        private static IList<User> _users = _Db.Users.Where(x => x.Role == UserRole.User).ToList();
-        private static IList<User> _admins = _Db.Users.Where(x => x.Role == UserRole.Admin).ToList();
+        private DbContextApp _Db = new DbContextApp();
+        
+        public IList<User> GetAllUsers()
+        {
+            return _Db.Users.ToList();
+        }
+        
+        public IList<User> GetClients()
+        {
+            return _Db.Users.Where(x => x.Role == UserRole.User).ToList();
+        }
+        
+        public IList<User> GetAdmins()
+        {
+            return _Db.Users.Where(x => x.Role == UserRole.Admin).ToList();
+        } 
+
         public void Create(User user)
         {
             _Db.Users.Add(user);
             _Db.SaveChanges();
-        }
-        public IList<User> GetAllUsers()
-        {
-            _allUsers = _Db.Users.ToList();
-            return _allUsers;
-        }
-
-        public IList<User> GetUsers()
-        {
-            return _users;
-        }
-
-        public IList<User> GetAdmins()
-        {
-            return _admins;
         }
 
         public User Login(string login, string password)
@@ -47,7 +45,12 @@ namespace Market_App.Models
 
         public void EditUser(User user)
         {
+            ClientPanel clientPanel = new ClientPanel();
+
+            var _allUsers = _Db.Users.ToList();
+
             var us = _allUsers.Where(x => x.Id == user.Id).FirstOrDefault();
+
             if(us != null)
             {
                 us.FirstName = user.FirstName;
@@ -56,23 +59,28 @@ namespace Market_App.Models
                 us.Login = user.Login;
                 us.Password = user.Password;
             }
+
             else
             {
-                ClientPanel.Execute();
+                clientPanel.Execute();
             }
+
             _Db.Users.UpdateRange(_allUsers);
+            
             _Db.SaveChanges();
         }
 
         public void RemoveUser(User user)
         {
+            ClientPanel clientPanel = new ClientPanel();
+
             if (user != null)
             {
                 _Db.Users.Remove(user);
             }
             else
             {
-                ClientPanel.Execute();
+                clientPanel.Execute();
             }
             _Db.SaveChanges();
         }

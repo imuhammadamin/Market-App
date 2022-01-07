@@ -9,31 +9,37 @@ namespace Market_App.Models
 {
     internal class ProductRepository : IProductRepository
     {
-        private static DbContextApp _Db = new DbContextApp();
-        private static IList<Product> _Products;
-        public static IList<Product> GetAllProducts()
+        private DbContextApp _Db = new DbContextApp();
+        private IList<Product> _Products = new List<Product>();
+        public IList<Product> GetAllProducts()
         {
             _Products = _Db.Products.ToList();
             return _Products;
         }
         
-        public static void RemoveProduct(Product product)
+        public void RemoveProduct(Product product)
         {
+            AdminPanel adminPanel = new AdminPanel();
+            
             var prod = _Db.Products.FirstOrDefault(x => x.Id == product.Id);
+            
             if (product != null)
             {
                 _Db.Products.Remove(prod);
             }
             else
             {
-                AdminPanel.Execute();
+                adminPanel.Execute();
             }
             _Db.SaveChanges();
         }
 
-        public static void Update(Product prod)
+        public void Update(Product prod)
         {
+            AdminPanel adminPanel = new AdminPanel();
+
             var product = _Products.Where(x => x.Id == prod.Id).FirstOrDefault();
+
             if (product != null)
             {
                 product.Name = prod.Name;
@@ -44,13 +50,13 @@ namespace Market_App.Models
              }
             else
             {
-                AdminPanel.Execute();
+                adminPanel.Execute();
             }
             _Db.Products.UpdateRange(_Products);
             _Db.SaveChanges();
         }
 
-        public static void Calculation(int id, float amount)
+        public void Calculation(int id, float amount)
         {
             var product = _Products.Where(x => x.Id == id).FirstOrDefault();
 
@@ -62,7 +68,7 @@ namespace Market_App.Models
             _Db.SaveChanges();
         }
 
-        public static void AddProduct(Product product)
+        public void AddProduct(Product product)
         {
             _Db.Products.Update(product);
             _Db.SaveChanges();

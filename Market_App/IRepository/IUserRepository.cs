@@ -8,9 +8,9 @@ namespace Market_App.IRepository
 {
     interface IUserRepository
     {
-        void Create(User user);
+        public void Create(User user);
         public IList<User> GetAllUsers();
-        public IList<User> GetUsers();
+        public IList<User> GetClients();
         public IList<User> GetAdmins();
         User Login(string login, string password);
         public void EditUser(User user);

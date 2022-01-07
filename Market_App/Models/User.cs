@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Market_App.Models
 {
-    public class User
+    internal class User
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

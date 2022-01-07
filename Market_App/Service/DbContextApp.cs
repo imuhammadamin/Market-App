@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Market_App.Service
 {
-    public class DbContextApp : DbContext
-    {
+    internal class DbContextApp : DbContext
+    {   
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
 

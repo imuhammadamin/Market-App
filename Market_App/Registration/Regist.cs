@@ -1,15 +1,22 @@
 ﻿using Market_App.Enums;
 using Market_App.IRepository;
 using Market_App.Models;
+using Market_App.Service;
 using System;
 
 namespace Market_App.Registration
 {
     internal class Regist
     {
-        private IUserRepository userRepo = new UserRepository();
+        private IUserRepository _userRepo = new UserRepository();
+
+        static AdminPanel adminPanel = new AdminPanel();
+
+        static ClientPanel clientPanel = new ClientPanel();
+
         public void Menu()
         {
+            
             Console.Clear();
 
             Console.WriteLine("\t\t\t\t\t1.Sign In | 2.Sign Up | 3. Exit");
@@ -34,6 +41,7 @@ namespace Market_App.Registration
         }
         public void SignUp()
         {
+
             Console.Clear();
 
             Console.Write("Name: ");
@@ -54,7 +62,7 @@ namespace Market_App.Registration
                 Console.WriteLine("Enter more than 5 items");
             }
 
-            userRepo.Create(
+            _userRepo.Create(
                 new User
                 {
                     FirstName = firstName,
@@ -76,6 +84,8 @@ namespace Market_App.Registration
         }
         public void SignIn()
         {
+
+
             Console.Clear();
             Console.Write("Login: ");
             string login = Console.ReadLine();
@@ -84,17 +94,17 @@ namespace Market_App.Registration
 
 
 
-            User user = userRepo.Login(login, password);
+            User user = _userRepo.Login(login, password);
             try
             {
                 if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
                 {
-                    AdminPanel.Execute();
+                    adminPanel.Execute();
                 }
 
                 else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
                 {
-                    ClientPanel.Execute();
+                    clientPanel.Execute();
                 }
 
             }

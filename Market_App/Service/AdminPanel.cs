@@ -9,23 +9,31 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Market_App.Registration;
 
 namespace Market_App.Models
 {
     internal class AdminPanel
     {
-        private static IUserRepository userRepo = new UserRepository();
-        private static IList<User> Users = userRepo.GetAllUsers();
-        private static IList<Product> products = ProductRepository.GetAllProducts();
-        private static Registration.Regist regist = new Registration.Regist();
+        private DbContextApp _Db = new DbContextApp();
+        static IProductRepository productRepo = new ProductRepository();
 
-        public static void Execute()
+        static IUserRepository userRepo = new UserRepository();
+
+        static Sales sales = new Sales();
+
+        public void Execute()
         {
             while (true)
             {
+                Regist regist = new Regist();
+                
                 Console.Clear();
+
                 Console.WriteLine("1. Browse all products | 2. Add product | 3. Update product | 4. Add Admin | 5. Show all admins | 6. Log out | 7. Exit");
+                
                 Console.Write("> ");
+                
                 string choose = Console.ReadLine();
 
                 switch (choose)
@@ -58,8 +66,9 @@ namespace Market_App.Models
             }
         }
 
-        private static void AddAdmin()
+        private void AddAdmin()
         {
+
             Console.Write("Enter First name: ");
             string firstName = Console.ReadLine();
 
@@ -95,9 +104,12 @@ namespace Market_App.Models
             else Execute();
         }
   
-        private static void ShowProducts()
+        private void ShowProducts()
         {
+
             Console.Clear();
+
+            var products = productRepo.GetAllProducts();
 
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
@@ -109,13 +121,19 @@ namespace Market_App.Models
             OptionMenu(table);
         }
         
-        private static void AddProduct()
+        private void AddProduct()
         {
+
+            var products = productRepo.GetAllProducts();
+            
             Console.Write("\nEnter product name: ");
+            
             string productName = Console.ReadLine();
+            
             productName = char.ToUpper(productName[0]) + productName.Substring(1);
 
             var product = products.Where(x => x.Name == productName).FirstOrDefault();
+            
             if (product != null)
             {
                 Console.Write("Enter price: ");
@@ -124,7 +142,7 @@ namespace Market_App.Models
                 Console.Write("Enter residue: ");
                 product.Residue = float.Parse(Console.ReadLine());
 
-                ProductRepository.Update(product);
+                productRepo.Update(product);
 
                 Console.WriteLine("Product edited.\n");
             }
@@ -146,7 +164,7 @@ namespace Market_App.Models
                 Console.Write("Enter type: ");
                 product1.Type = Console.ReadLine();
 
-                ProductRepository.AddProduct(product1);
+                productRepo.AddProduct(product1);
 
                 Console.WriteLine("Product added.\n");
             }
@@ -154,9 +172,12 @@ namespace Market_App.Models
             ShowProducts();
         }
         
-        private static void UpdateProduct()
+        private void UpdateProduct()
         {
+
             Console.Clear();
+
+            var products = productRepo.GetAllProducts();
 
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
@@ -192,7 +213,7 @@ namespace Market_App.Models
 
         }
         
-        private static void UpdateProduct(ConsoleTable table)
+        private void UpdateProduct(ConsoleTable table)
         {
             table.Write();
 
@@ -221,15 +242,16 @@ namespace Market_App.Models
 
         }
         
-        private static void SearchProduct()
+        private void SearchProduct()
         {
+
             Console.Write("\nEnter the product name: ");
 
             string nameProduct = Console.ReadLine();
             
             string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
             
-            var product = Sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct1)).FirstOrDefault();
+            var product = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct1)).FirstOrDefault();
             
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
@@ -238,8 +260,9 @@ namespace Market_App.Models
             OptionMenu("Search product", table);
         }
         
-        private static void DeleteProduct(ConsoleTable table)
+        private void DeleteProduct(ConsoleTable table)
         {
+
             Console.Clear();
 
             table.Write();
@@ -247,11 +270,11 @@ namespace Market_App.Models
             Console.Write("Enter №: ");
             int id = int.Parse(Console.ReadLine());
 
-            var product = products.Where(x => x.Id == id).FirstOrDefault();
+            var product = productRepo.GetAllProducts().Where(x => x.Id == id).FirstOrDefault();
 
             if (product != null)
             {
-                ProductRepository.RemoveProduct(product);
+                productRepo.RemoveProduct(product);
                 ShowProducts();
             }
             else
@@ -261,7 +284,7 @@ namespace Market_App.Models
             }
         }
         
-        private static void OptionMenu(ConsoleTable table)
+        private void OptionMenu(ConsoleTable table)
         {
             Console.Clear();
 
@@ -300,7 +323,7 @@ namespace Market_App.Models
             }
         }
         
-        private static void OptionMenu(string option, ConsoleTable table)
+        private void OptionMenu(string option, ConsoleTable table)
         {
             if (option == "Search product")
             {
@@ -373,8 +396,9 @@ namespace Market_App.Models
             }
         }
         
-        private static void EditProduct(ConsoleTable table)
+        private void EditProduct(ConsoleTable table)
         {
+
             Console.Clear();
 
             table.Write();
@@ -383,7 +407,7 @@ namespace Market_App.Models
 
             int id = int.Parse(Console.ReadLine());
 
-            var product = products.Where(x => x.Id.Equals(id)).FirstOrDefault();
+            var product = productRepo.GetAllProducts().Where(x => x.Id.Equals(id)).FirstOrDefault();
 
             Console.Clear();
 
@@ -426,14 +450,17 @@ namespace Market_App.Models
                         EditProduct(table);
                         break;
                 }
-                ProductRepository.Update(product);
+
+                productRepo.Update(product);
+
                 UpdateProduct();
 
             }
         }
         
-        private static void ShowUsers()
+        private void ShowUsers()
         {
+
             var users = userRepo.GetAllUsers();
 
             var table = new ConsoleTable("№", "First Name", "Last Name", "Role", "Login", "Password");
@@ -446,8 +473,10 @@ namespace Market_App.Models
             OptionMenu("Show all users", table);
         }
         
-        private static void EditUser(ConsoleTable table)
+        private void EditUser(ConsoleTable table)
         {
+
+
             Console.Clear();
 
             table.Write();
@@ -456,7 +485,7 @@ namespace Market_App.Models
 
             int id = int.Parse(Console.ReadLine());
 
-            var admin = Users.Where(x => x.Id.Equals(id)).FirstOrDefault();
+            var admin = _Db.Users.Where(x => x.Id.Equals(id)).FirstOrDefault();
 
             Console.Clear();
 
@@ -497,8 +526,9 @@ namespace Market_App.Models
             }
         }
         
-        private static void DeleteUser(ConsoleTable table)
+        private void DeleteUser(ConsoleTable table)
         {
+
             Console.Clear();
 
             table.Write();
@@ -507,7 +537,7 @@ namespace Market_App.Models
 
             int id = int.Parse(Console.ReadLine());
 
-            var admin = Users.Where(x => x.Id == id).FirstOrDefault();
+            var admin = _Db.Users.Where(x => x.Id == id).FirstOrDefault();
 
             if (admin != null)
             {

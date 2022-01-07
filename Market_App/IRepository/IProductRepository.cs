@@ -7,11 +7,10 @@ namespace Market_App.IRepository
 {
     interface IProductRepository
     {
-        private static IList<Product> _allProducts;
-
-        private static void AddAllProducts() { }
-
-        public static IList<Product> GetAllProducts() { return _allProducts; }
-        public static bool RemoveProduct() { return false; }
+        public IList<Product> GetAllProducts();
+        public void RemoveProduct(Product product);
+        public void AddProduct(Product product);
+        public void Update(Product product);
+        public void Calculation(int id, float amount);
     }
 }
