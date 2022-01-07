@@ -18,6 +18,7 @@ namespace Market_App.Models
         private static IList<User> Users = userRepo.GetAllUsers();
         private static IList<Product> products = ProductRepository.GetAllProducts();
         private static Registration.Regist regist = new Registration.Regist();
+
         public static void Execute()
         {
             while (true)
@@ -56,6 +57,7 @@ namespace Market_App.Models
                 }
             }
         }
+
         private static void AddAdmin()
         {
             Console.Write("Enter First name: ");
@@ -92,6 +94,7 @@ namespace Market_App.Models
                 AddAdmin();
             else Execute();
         }
+  
         private static void ShowProducts()
         {
             Console.Clear();
@@ -105,6 +108,7 @@ namespace Market_App.Models
 
             OptionMenu(table);
         }
+        
         private static void AddProduct()
         {
             Console.Write("\nEnter product name: ");
@@ -149,6 +153,7 @@ namespace Market_App.Models
 
             ShowProducts();
         }
+        
         private static void UpdateProduct()
         {
             Console.Clear();
@@ -186,6 +191,7 @@ namespace Market_App.Models
             }
 
         }
+        
         private static void UpdateProduct(ConsoleTable table)
         {
             table.Write();
@@ -214,18 +220,24 @@ namespace Market_App.Models
             }
 
         }
+        
         private static void SearchProduct()
         {
             Console.Write("\nEnter the product name: ");
+
             string nameProduct = Console.ReadLine();
+            
             string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
-            var product = Sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1)).FirstOrDefault();
+            
+            var product = Sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct1)).FirstOrDefault();
+            
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
             table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
 
             OptionMenu("Search product", table);
         }
+        
         private static void DeleteProduct(ConsoleTable table)
         {
             Console.Clear();
@@ -236,6 +248,7 @@ namespace Market_App.Models
             int id = int.Parse(Console.ReadLine());
 
             var product = products.Where(x => x.Id == id).FirstOrDefault();
+
             if (product != null)
             {
                 ProductRepository.RemoveProduct(product);
@@ -247,6 +260,7 @@ namespace Market_App.Models
                 DeleteProduct(table);
             }
         }
+        
         private static void OptionMenu(ConsoleTable table)
         {
             Console.Clear();
@@ -261,6 +275,7 @@ namespace Market_App.Models
             Console.Write("\nEnter option: ");
 
             string choose = Console.ReadLine();
+
             switch (choose)
             {
                 case "1":
@@ -284,6 +299,7 @@ namespace Market_App.Models
                     break;
             }
         }
+        
         private static void OptionMenu(string option, ConsoleTable table)
         {
             if (option == "Search product")
@@ -299,6 +315,7 @@ namespace Market_App.Models
                 Console.Write("\nEnter option: ");
 
                 string choose = Console.ReadLine();
+
                 switch (choose)
                 {
                     case "1":
@@ -319,6 +336,7 @@ namespace Market_App.Models
                         break;
                 }
             }
+
             else if (option == "Show all users")
             {
                 Console.Clear();
@@ -332,6 +350,7 @@ namespace Market_App.Models
                 Console.Write("\nEnter option: ");
 
                 string choose = Console.ReadLine();
+
                 switch (choose)
                 {
                     case "1":
@@ -353,6 +372,7 @@ namespace Market_App.Models
                 }
             }
         }
+        
         private static void EditProduct(ConsoleTable table)
         {
             Console.Clear();
@@ -360,15 +380,19 @@ namespace Market_App.Models
             table.Write();
 
             Console.Write("\nEnter №: ");
+
             int id = int.Parse(Console.ReadLine());
 
             var product = products.Where(x => x.Id.Equals(id)).FirstOrDefault();
 
             Console.Clear();
+
             table.Write();
 
             Console.WriteLine("\n1. Name | 2. Price | 3. Unit | 4. Residue | 5. Type | 6. Back ");
-            Console.Write("Select: ");
+
+            Console.Write("> ");
+
             int choose = int.Parse(Console.ReadLine());
 
             if (product != null)
@@ -407,6 +431,7 @@ namespace Market_App.Models
 
             }
         }
+        
         private static void ShowUsers()
         {
             var users = userRepo.GetAllUsers();
@@ -420,6 +445,7 @@ namespace Market_App.Models
 
             OptionMenu("Show all users", table);
         }
+        
         private static void EditUser(ConsoleTable table)
         {
             Console.Clear();
@@ -427,15 +453,19 @@ namespace Market_App.Models
             table.Write();
 
             Console.Write("\nEnter №: ");
+
             int id = int.Parse(Console.ReadLine());
 
             var admin = Users.Where(x => x.Id.Equals(id)).FirstOrDefault();
 
             Console.Clear();
+
             table.Write();
 
             Console.WriteLine("\n1. First Name | 2. Last Name | 3. Login | 4. Password | 5. Back ");
-            Console.Write("Select: ");
+
+            Console.Write("> ");
+
             int choose = int.Parse(Console.ReadLine());
 
             if (admin != null)
@@ -466,6 +496,7 @@ namespace Market_App.Models
                 ShowUsers();
             }
         }
+        
         private static void DeleteUser(ConsoleTable table)
         {
             Console.Clear();
@@ -473,9 +504,11 @@ namespace Market_App.Models
             table.Write();
 
             Console.Write("Enter №: ");
+
             int id = int.Parse(Console.ReadLine());
 
             var admin = Users.Where(x => x.Id == id).FirstOrDefault();
+
             if (admin != null)
             {
                 userRepo.RemoveUser(admin);

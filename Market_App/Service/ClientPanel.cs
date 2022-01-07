@@ -7,18 +7,23 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Market_App.Registration;
 
 namespace Market_App.Models
 {
     internal class ClientPanel
     {
+        private static Regist menu = new Regist();
         public static void Execute()
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("1. Browse all products | 2. Search product | 3. Basket | 4. Exit");
-                Console.Write("> ");
+
+                Console.WriteLine("1. Browse all products | 2. Search product | 3. Basket | 4. Back | 5. Exit");
+
+                Console.Write("\n> ");
+
                 string option = Console.ReadLine();
 
                 switch (option)
@@ -33,6 +38,9 @@ namespace Market_App.Models
                         ShowBasket();
                         break;
                     case "4":
+                        menu.Menu();
+                        break;
+                    case "5":
                         Environment.Exit(0);
                         break;
                 }
@@ -91,6 +99,7 @@ namespace Market_App.Models
         private static void ShowBasket()
         {
             Console.Clear();
+
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
             float summ = 0;
@@ -105,6 +114,7 @@ namespace Market_App.Models
             table.AddRow(" ", "Summ: ", summPrice, " ", " ", " ");
 
             table.Write();
+
             if (BasketRepository.GetBasket().Count == 0)
                 OptionMenu("Show all products");
             else OptionMenu("Buy");
@@ -118,7 +128,9 @@ namespace Market_App.Models
                 int id = int.Parse(Console.ReadLine());
 
                 var product = Sales.GetProductsForSelling().Where(x => x.Id.Equals(id)).FirstOrDefault();
+
                 Product prod = new Product();
+                
                 if (product == null)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -127,17 +139,22 @@ namespace Market_App.Models
 
                     AddToBasket("");
                 }
+
                 Console.Write("Enter the amount you want to buy: ");
+
                 float amount = float.Parse(Console.ReadLine());
+
                 prod.Id = product.Id;
                 prod.Name = product.Name;
                 prod.Price = product.Price;
                 prod.Unit = product.Unit;
                 prod.Residue = product.Residue;
                 prod.Type = product.Type;
+
                 if (amount <= prod.Residue && amount > 0)
                 {
                     prod.Residue = amount;
+
                     BasketRepository.AddToBasket(prod);
                 }
                 else
@@ -158,6 +175,7 @@ namespace Market_App.Models
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nInput error! Please enter again.\n");
                 Console.ForegroundColor = ConsoleColor.White;
+
                 AddToBasket("");
             }
             
@@ -172,6 +190,7 @@ namespace Market_App.Models
                 if (pr.Id == id)
                     pr.Residue -= amount;
             }
+
             using (TextWriter tw = new StreamWriter(Constants.ProductsDbPath))
             {
                 for (int i = 0; i < products.Count; i++)
@@ -188,7 +207,9 @@ namespace Market_App.Models
 
         private static void OptionMenu(string firstOption)
         {
+
             Console.WriteLine($"1. {firstOption}");
+
             if (firstOption == "Add to Basket")
             {
                 Console.WriteLine("2. Search products");
@@ -197,6 +218,7 @@ namespace Market_App.Models
                 Console.Write("Enter option: ");
 
                 string option = Console.ReadLine();
+
                 switch (option)
                 {
                     case "1":
@@ -225,6 +247,7 @@ namespace Market_App.Models
                 Console.Write("Enter option: ");
 
                 string option = Console.ReadLine();
+
                 switch (option)
                 {
                     case "1":
@@ -255,6 +278,7 @@ namespace Market_App.Models
                 Console.Write("Enter option: ");
 
                 string option = Console.ReadLine();
+
                 switch (option)
                 {
                     case "1":
@@ -285,6 +309,7 @@ namespace Market_App.Models
                 Console.Write("Enter option: ");
 
                 string option = Console.ReadLine();
+
                 switch (option)
                 {
                     case "1":
@@ -306,7 +331,9 @@ namespace Market_App.Models
             {
                 Console.WriteLine("2. Back to Menu");
                 Console.Write("Enter option: ");
+
                 string option = Console.ReadLine();
+
                 switch (option)
                 {
                     case "1":
@@ -327,7 +354,9 @@ namespace Market_App.Models
         private static void Buy()
         {
             Console.Write("Enter №: ");
+
             int id = int.Parse(Console.ReadLine());
+
             var product = BasketRepository.GetBasket().Where(x => x.Id.Equals(id));
 
             foreach (var pr in product)
@@ -336,7 +365,9 @@ namespace Market_App.Models
             }
 
             BasketRepository.ClearBasket();
+
             Console.Write("Do you want to buy all the products?[y, n]: ");
+
             string choose = Console.ReadLine();
 
             if (choose == "y" || choose == "Y")
@@ -356,14 +387,18 @@ namespace Market_App.Models
                 Console.WriteLine("Thank you for your purchase!");
                 Console.ForegroundColor = ConsoleColor.White;
 
-                Console.WriteLine("Want to buy again?[y, n]");
+                Console.WriteLine("Want to buy again? [y, n]: ");
+
                 string choose1 = Console.ReadLine();
+
                 if (choose1 == "y" || choose1 == "Y")
                     ShowProducts();
                 else
                     Environment.Exit(0);
             }
+
             else if (choose == "n" || choose == "N") OptionMenu("Buy");
+
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -377,7 +412,9 @@ namespace Market_App.Models
         private static void RemoveFromBasket()
         {
             Console.Write("Enter №: ");
+
             int id = int.Parse(Console.ReadLine());
+
             foreach (var product in BasketRepository.GetBasket())
             {
                 if (product.Id.Equals(id))
