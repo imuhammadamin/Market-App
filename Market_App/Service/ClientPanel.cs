@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Market_App.Models
 {
-    internal class CommerceUser
+    internal class ClientPanel
     {
         public static void Execute()
         {
@@ -18,7 +18,7 @@ namespace Market_App.Models
             {
                 Console.Clear();
                 Console.WriteLine("1. Browse all products | 2. Search product | 3. Basket | 4. Exit");
-                Console.Write("Enter your option: ");
+                Console.Write("> ");
                 string option = Console.ReadLine();
 
                 switch (option)

@@ -58,7 +58,7 @@ namespace Market_App.Models
             }
             else
             {
-                CommerceUser.Execute();
+                ClientPanel.Execute();
             }
             _Db.Users.UpdateRange(_allUsers);
             _Db.SaveChanges();
@@ -72,7 +72,7 @@ namespace Market_App.Models
             }
             else
             {
-                CommerceUser.Execute();
+                ClientPanel.Execute();
             }
             _Db.SaveChanges();
         }

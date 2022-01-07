@@ -10,6 +10,5 @@ namespace Market_App.Service
 {
     internal class MethodService
     {
-        public static string GetUserPath() { return null; }
     }
 }

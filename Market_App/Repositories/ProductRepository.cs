@@ -26,7 +26,7 @@ namespace Market_App.Models
             }
             else
             {
-                CommerceAdmin.Execute();
+                AdminPanel.Execute();
             }
             _Db.SaveChanges();
         }
@@ -44,7 +44,7 @@ namespace Market_App.Models
              }
             else
             {
-                CommerceAdmin.Execute();
+                AdminPanel.Execute();
             }
             _Db.Products.UpdateRange(_Products);
             _Db.SaveChanges();

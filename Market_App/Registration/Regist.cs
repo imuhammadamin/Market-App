@@ -8,12 +8,12 @@ namespace Market_App.Registration
     internal class Regist
     {
         private IUserRepository userRepo = new UserRepository();
-        public void Execute()
+        public void Menu()
         {
             Console.Clear();
 
             Console.WriteLine("\t\t\t\t\t1.Sign In | 2.Sign Up | 3. Exit");
-            Console.Write("Select: ");
+            Console.Write("> ");
             string choose = Console.ReadLine();
 
             switch (choose)
@@ -28,7 +28,7 @@ namespace Market_App.Registration
                     Environment.Exit(0);
                     break;
                 default:
-                    Execute();
+                    Menu();
                     break;
             }
         }
@@ -87,23 +87,23 @@ namespace Market_App.Registration
             User user = userRepo.Login(login, password);
             if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
             {
-                CommerceAdmin.Execute();
+                AdminPanel.Execute();
             }
 
             else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
             {
-                CommerceUser.Execute();
+                ClientPanel.Execute();
             }
             else
             {
                 Console.WriteLine("\nNot Found!\n1.Try again\t|\t2.Exit ");
-                Console.Write("Select: ");
+                Console.Write("> ");
                 string choose = Console.ReadLine();
 
                 if (choose == "1")
                 {
                     Console.Clear();
-                    Execute();
+                    Menu();
                 }
 
                 else if (choose == "2")

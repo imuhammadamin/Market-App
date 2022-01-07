@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Database\UsersData\" />
-    <Folder Include="IRepository\AdminAndUser\" />
   </ItemGroup>
 
 </Project>

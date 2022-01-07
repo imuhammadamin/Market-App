@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Market_App.Models
 {
-    internal class CommerceAdmin
+    internal class AdminPanel
     {
         private static IUserRepository userRepo = new UserRepository();
         private static IList<User> Users = userRepo.GetAllUsers();
@@ -45,7 +45,7 @@ namespace Market_App.Models
                         ShowUsers();
                         break;
                     case "6":
-                        regist.Execute();
+                        regist.Menu();
                         break;
                     case "7":
                         Environment.Exit(0);
