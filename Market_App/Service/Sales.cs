@@ -13,7 +13,6 @@ namespace Market_App.Models
             _sellingProducts.Clear();
             foreach (Product res in ProductRepository.GetAllProducts())
             {
-                //res = pr;
                 if (res.Price < 8000)
                     res.Price += 500;
                 else if (res.Price < 20000)
