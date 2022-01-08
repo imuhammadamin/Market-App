@@ -374,7 +374,7 @@ namespace Market_App.Models
                     break;
                 default:
                     CatchErrors.InputError();
-                    OptionMenu(table);
+                    ShowProducts();
                     break;
             }
         }

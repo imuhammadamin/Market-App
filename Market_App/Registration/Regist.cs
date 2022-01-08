@@ -39,6 +39,7 @@ namespace Market_App.Registration
                     Environment.Exit(0);
                     break;
                 default:
+                    CatchErrors.InputError();
                     Menu();
                     break;
             }
