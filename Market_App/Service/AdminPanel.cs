@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Market_App.Registration;
+using Market_App.Extensions;
 
 namespace Market_App.Models
 {
@@ -33,7 +34,7 @@ namespace Market_App.Models
 
                 Console.WriteLine("1. Browse all products | 2. Add product | 3. Update product | 4. Add Admin | 5. Show all admins | 6. Log out | 7. Exit");
                 
-                Console.Write("> ");
+                Console.Write("\n> ");
                 
                 string choose = Console.ReadLine();
 
@@ -71,10 +72,10 @@ namespace Market_App.Models
         {
 
             Console.Write("Enter First name: ");
-            string firstName = Console.ReadLine();
+            string firstName = Console.ReadLine().Capitalize();
 
             Console.Write("Enter Last name: ");
-            string lastName = Console.ReadLine();
+            string lastName = Console.ReadLine().Capitalize();
 
             Console.Write("Enter login: ");
             string login = Console.ReadLine();
@@ -94,10 +95,10 @@ namespace Market_App.Models
             Console.Clear();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Succes!");
+            Console.WriteLine("Succes!\n");
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("Do you want add admin again? [y, n]");
+            Console.Write("Do you want add admin again? [y, n]: ");
             string choose = Console.ReadLine();
 
             if (choose == "Y" || choose == "y")
@@ -131,9 +132,7 @@ namespace Market_App.Models
             
             string productName = Console.ReadLine();
             
-            productName = char.ToUpper(productName[0]) + productName.Substring(1);
-
-            var product = products.Where(x => x.Name == productName).FirstOrDefault();
+            var product = products.Where(x => x.Name == productName.Capitalize()).FirstOrDefault();
             
             if (product != null)
             {
@@ -151,7 +150,7 @@ namespace Market_App.Models
             {
                 Product product1 = new Product();
                 Console.Write("Enter name: ");
-                product1.Name = Console.ReadLine();
+                product1.Name = Console.ReadLine().Capitalize();
 
                 Console.Write("Enter price: ");
                 product1.Price = decimal.Parse(Console.ReadLine());
@@ -163,7 +162,7 @@ namespace Market_App.Models
                 product1.Residue = float.Parse(Console.ReadLine());
 
                 Console.Write("Enter type: ");
-                product1.Type = Console.ReadLine();
+                product1.Type = Console.ReadLine().Capitalize();
 
                 productRepo.AddProduct(product1);
 
@@ -250,9 +249,7 @@ namespace Market_App.Models
 
             string nameProduct = Console.ReadLine();
             
-            string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
-            
-            var product = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct1)).FirstOrDefault();
+            var product = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct.Capitalize())).FirstOrDefault();
             
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
@@ -425,7 +422,7 @@ namespace Market_App.Models
                 {
                     case 1:
                         Console.Write("Enter name: ");
-                        product.Name = Console.ReadLine();
+                        product.Name = Console.ReadLine().Capitalize();
                         break;
                     case 2:
                         Console.Write("Enter price: ");
@@ -441,7 +438,7 @@ namespace Market_App.Models
                         break;
                     case 5:
                         Console.Write("Enter type: ");
-                        product.Type = Console.ReadLine();
+                        product.Type = Console.ReadLine().Capitalize();
                         break;
                     case 6:
                         UpdateProduct(table);
@@ -500,11 +497,11 @@ namespace Market_App.Models
                 {
                     case 1:
                         Console.Write("Enter name: ");
-                        admin.FirstName = Console.ReadLine();
+                        admin.FirstName = Console.ReadLine().Capitalize();
                         break;
                     case 2:
                         Console.Write("Enter price: ");
-                        admin.LastName = Console.ReadLine();
+                        admin.LastName = Console.ReadLine().Capitalize();
                         break;
                     case 3:
                         Console.Write("Enter unit: ");

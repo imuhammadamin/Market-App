@@ -7,6 +7,7 @@ using Market_App.IRepository;
 using Market_App.Models;
 using Market_App.Registration;
 using Market_App.Service;
+using Market_App.Extensions;
 
 namespace Market_App
 {
@@ -14,8 +15,10 @@ namespace Market_App
     {
         static void Main(string[] args)
         {
+
             Regist regist = new Regist();
             regist.Menu();
+
         }
    
     }

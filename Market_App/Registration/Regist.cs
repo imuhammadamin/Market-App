@@ -1,4 +1,5 @@
 ﻿using Market_App.Enums;
+using Market_App.Extensions;
 using Market_App.IRepository;
 using Market_App.Models;
 using Market_App.Service;
@@ -46,10 +47,10 @@ namespace Market_App.Registration
             Console.Clear();
 
             Console.Write("Name: ");
-            string firstName = Console.ReadLine();
+            string firstName = Console.ReadLine().Capitalize();
 
             Console.Write("Surname: ");
-            string lastName = Console.ReadLine();
+            string lastName = Console.ReadLine().Capitalize();
 
             Console.Write("Login: ");
             string userslogin = Console.ReadLine();
@@ -86,17 +87,16 @@ namespace Market_App.Registration
         
         public void SignIn()
         {
-
-
             Console.Clear();
+
             Console.Write("Login: ");
             string login = Console.ReadLine();
+
             Console.Write("Password: ");
             string password = ReadPassword();
 
-
-
             User user = _userRepo.Login(login, password);
+
             try
             {
                 if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
@@ -108,13 +108,12 @@ namespace Market_App.Registration
                 {
                     clientPanel.Execute();
                 }
-
             }
             catch
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("There is no such user!");
+                Console.WriteLine("There is no such user!\n");
                 Console.ForegroundColor = ConsoleColor.White;
 
                 Console.WriteLine("1. Try again | 2. Sig Up | 3. Exit ");

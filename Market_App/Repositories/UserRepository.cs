@@ -10,8 +10,16 @@ namespace Market_App.Models
 {
     internal class UserRepository : IUserRepository
     {
+        static ClientPanel clientPanel = new ClientPanel();
+
         private DbContextApp _Db = new DbContextApp();
-        
+
+        public void Create(User user)
+        {
+            _Db.Users.Add(user);
+            _Db.SaveChanges();
+        }
+
         public IList<User> GetAllUsers()
         {
             return _Db.Users.ToList();
@@ -27,12 +35,6 @@ namespace Market_App.Models
             return _Db.Users.Where(x => x.Role == UserRole.Admin).ToList();
         } 
 
-        public void Create(User user)
-        {
-            _Db.Users.Add(user);
-            _Db.SaveChanges();
-        }
-
         public User Login(string login, string password)
         {
             var user = _Db.Users.Where(x => x.Login == login && x.Password == password).FirstOrDefault();
@@ -45,7 +47,6 @@ namespace Market_App.Models
 
         public void EditUser(User user)
         {
-            ClientPanel clientPanel = new ClientPanel();
 
             var _allUsers = _Db.Users.ToList();
 
@@ -72,16 +73,18 @@ namespace Market_App.Models
 
         public void RemoveUser(User user)
         {
-            ClientPanel clientPanel = new ClientPanel();
 
-            if (user != null)
+            var us = _Db.Users.Where(x => x.Id == user.Id).FirstOrDefault();
+
+            if (us != null)
             {
-                _Db.Users.Remove(user);
+                _Db.Users.Remove(us);
             }
             else
             {
                 clientPanel.Execute();
             }
+
             _Db.SaveChanges();
         }
     }
