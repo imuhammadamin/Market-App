@@ -52,6 +52,10 @@ namespace Market_App.Models
                     case "5":
                         Environment.Exit(0);
                         break;
+                    default:
+                        CatchErrors.InputError();
+                        Execute();
+                        break;
                 }
             }
         }
@@ -108,9 +112,8 @@ namespace Market_App.Models
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nInput error! Please enter again.");
-                Console.ForegroundColor = ConsoleColor.White;
+                CatchErrors.InputError();
+                
                 SearchProduct();
             }
         }
@@ -193,11 +196,9 @@ namespace Market_App.Models
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nInput error! Please enter again.\n");
-                Console.ForegroundColor = ConsoleColor.White;
+                CatchErrors.InputError();
 
-                AddToBasket("");
+                ShowProducts();
             }
             
         }
@@ -231,7 +232,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("\nInput error! Please try again.");
+                        CatchErrors.InputError();
                         OptionMenu(firstOption);
                         break;
                 }
@@ -261,7 +262,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("\nInput error! Please try again.");
+                        CatchErrors.InputError();
                         OptionMenu(firstOption);
                         break;
                 }
@@ -294,7 +295,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("\nInput error! Please try again.");
+                        CatchErrors.InputError();
                         OptionMenu(firstOption);
                         break;
                 }
@@ -319,7 +320,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("\nInput error! Please try again.");
+                        CatchErrors.InputError();
                         OptionMenu(firstOption);
                         break;
                 }
@@ -341,7 +342,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("\nInput error! Please try again.");
+                        CatchErrors.InputError();
                         OptionMenu(firstOption);
                         break;
                 }
@@ -350,7 +351,8 @@ namespace Market_App.Models
 
         private void Buy()
         {
-            Console.Write("Do you want to buy all the products? [y, n]: ");
+            
+            Console.Write("\nDo you want to buy all the products? [y, n]: ");
 
             string choose = Console.ReadLine();
 
@@ -378,13 +380,11 @@ namespace Market_App.Models
                     Environment.Exit(0);
             }
 
-            else if (choose == "n" || choose == "N") OptionMenu("Buy");
+            else if (choose == "n" || choose == "N") ShowBasket();
 
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You are entered error! Please enter again.");
-                Console.ForegroundColor = ConsoleColor.White;
+                CatchErrors.InputError();
                 Buy();
             }
 
@@ -392,20 +392,30 @@ namespace Market_App.Models
 
         private void RemoveFromBasket()
         {
-            Console.Write("Enter №: ");
-
-            int id = int.Parse(Console.ReadLine());
-
-            foreach (var product in basketRepository.GetBasket())
+            try
             {
-                if (product.Id.Equals(id))
-                    if (basketRepository.RemoveFromBasket(product))
-                        ShowBasket();
-                    else
-                    {
-                        Console.WriteLine("Such a product is not available in the basket!");
-                        RemoveFromBasket();
-                    }
+
+                Console.Write("Enter №: ");
+
+                int id = int.Parse(Console.ReadLine());
+
+                foreach (var product in basketRepository.GetBasket())
+                {
+                    if (product.Id.Equals(id))
+                        if (basketRepository.RemoveFromBasket(product))
+                            ShowBasket();
+                        else
+                        {
+                            Console.WriteLine("Such a product is not available in the basket!");
+                            RemoveFromBasket();
+                        }
+                }
+            }
+            catch
+            {
+                CatchErrors.InputError();
+
+                ShowBasket();
             }
         }
 

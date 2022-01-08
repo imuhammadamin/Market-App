@@ -11,13 +11,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Market_App.Registration;
 using Market_App.Extensions;
+using System.Threading;
 
 namespace Market_App.Models
 {
     internal class AdminPanel
     {
-        private DbContextApp _Db = new DbContextApp();
-
         static IProductRepository productRepo = new ProductRepository();
 
         static IUserRepository userRepo = new UserRepository();
@@ -32,7 +31,7 @@ namespace Market_App.Models
                 
                 Console.Clear();
 
-                Console.WriteLine("1. Browse all products | 2. Update product | 3. Add Admin | 4. Show all admins | 5. Log out | 6. Exit");
+                Console.WriteLine("1. Browse all products | 2. Update product | 3. Create Admin | 4. Show all users | 5. Log out | 6. Exit");
                 
                 Console.Write("\n> ");
                 
@@ -59,6 +58,7 @@ namespace Market_App.Models
                         Environment.Exit(0);
                         break;
                     default:
+                        CatchErrors.InputError();
                         Execute();
                         break;
                 }
@@ -67,57 +67,70 @@ namespace Market_App.Models
 
         private void AddAdmin()
         {
-
-            Console.Write("Enter First name: ");
-            string firstName = Console.ReadLine().Capitalize();
-
-            Console.Write("Enter Last name: ");
-            string lastName = Console.ReadLine().Capitalize();
-
-            Console.Write("Enter login: ");
-            string login = Console.ReadLine();
-
-            if (!AdminInspection(login))
+            try
             {
 
-                Console.Write("Enter password: ");
-                string password = Console.ReadLine();
-                User admin = new User
+                Console.Write("Enter First name: ");
+                string firstName = Console.ReadLine().Capitalize();
+
+                Console.Write("Enter Last name: ");
+                string lastName = Console.ReadLine().Capitalize();
+
+                Console.Write("Enter login: ");
+                string login = Console.ReadLine();
+
+                if (!AdminInspection(login))
                 {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Role = UserRole.Admin,
-                    Login = login,
-                    Password = password
-                };
-                userRepo.Create(admin);
 
-                Console.Clear();
+                    Console.Write("Enter password: ");
+                    string password = Console.ReadLine();
+                    User admin = new User
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Role = UserRole.Admin,
+                        Login = login,
+                        Password = password
+                    };
+                    userRepo.Create(admin);
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Succes!\n");
-                Console.ForegroundColor = ConsoleColor.White;
+                    Console.Clear();
 
-                Console.Write("Do you want add admin again? [y, n]: ");
-                string choose = Console.ReadLine();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Succes!\n");
+                    Console.ForegroundColor = ConsoleColor.White;
 
-                if (choose == "Y" || choose == "y")
-                    AddAdmin();
-                else Execute();
+                    Console.Write("Do you want add admin again? [y, n]: ");
+                    string choose = Console.ReadLine();
+
+                    if (choose == "Y" || choose == "y")
+                        AddAdmin();
+                    else Execute();
+                }
+                else
+                {
+                    Console.Clear();
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Such a user exists!");
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                    Console.Write("\nWould you like to try again? [y, n]: ");
+                    string choose = Console.ReadLine();
+
+                    if (choose == "y" || choose == "Y") AddAdmin();
+                    else Execute();
+                }
             }
-            else
+            catch
             {
-                Console.Clear();
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Such a user exists!");
+                Console.ForegroundColor= ConsoleColor.Red;
+                Console.WriteLine("Input error! Please try again.");
                 Console.ForegroundColor = ConsoleColor.White;
 
-                Console.Write("\nWould you like to try again? [y, n]: ");
-                string choose = Console.ReadLine();
+                Thread.Sleep(1300);
 
-                if (choose == "y" || choose == "Y") AddAdmin();
-                else Execute();
+                ShowUsers();
             }
         }
   
@@ -140,51 +153,59 @@ namespace Market_App.Models
         
         private void AddProduct()
         {
-
-            var products = productRepo.GetAllProducts();
-            
-            Console.Write("\nEnter product name: ");
-            
-            string productName = Console.ReadLine();
-            
-            var product = products.Where(x => x.Name == productName.Capitalize()).FirstOrDefault();
-            
-            if (product != null)
+            try
             {
-                Console.Write("Enter price: ");
-                product.Price = decimal.Parse(Console.ReadLine());
 
-                Console.Write("Enter residue: ");
-                product.Residue = float.Parse(Console.ReadLine());
+                var products = productRepo.GetAllProducts();
 
-                productRepo.Update(product);
+                Console.Write("\nEnter product name: ");
 
-                Console.WriteLine("Product edited.\n");
+                string productName = Console.ReadLine();
+
+                var product = products.Where(x => x.Name == productName.Capitalize()).FirstOrDefault();
+
+                if (product != null)
+                {
+                    Console.Write("Enter price: ");
+                    product.Price = decimal.Parse(Console.ReadLine());
+
+                    Console.Write("Enter residue: ");
+                    product.Residue = float.Parse(Console.ReadLine());
+
+                    productRepo.Update(product);
+
+                    Console.WriteLine("Product edited.\n");
+                }
+                else
+                {
+                    Product product1 = new Product();
+                    Console.Write("Enter name: ");
+                    product1.Name = Console.ReadLine().Capitalize();
+
+                    Console.Write("Enter price: ");
+                    product1.Price = decimal.Parse(Console.ReadLine());
+
+                    Console.Write("Enter unit: ");
+                    product1.Unit = Console.ReadLine();
+
+                    Console.Write("Enter residue: ");
+                    product1.Residue = float.Parse(Console.ReadLine());
+
+                    Console.Write("Enter type: ");
+                    product1.Type = Console.ReadLine().Capitalize();
+
+                    productRepo.AddProduct(product1);
+
+                    Console.WriteLine("Product added.\n");
+                }
+
+                ShowProducts();
             }
-            else
+            catch
             {
-                Product product1 = new Product();
-                Console.Write("Enter name: ");
-                product1.Name = Console.ReadLine().Capitalize();
-
-                Console.Write("Enter price: ");
-                product1.Price = decimal.Parse(Console.ReadLine());
-
-                Console.Write("Enter unit: ");
-                product1.Unit = Console.ReadLine();
-
-                Console.Write("Enter residue: ");
-                product1.Residue = float.Parse(Console.ReadLine());
-
-                Console.Write("Enter type: ");
-                product1.Type = Console.ReadLine().Capitalize();
-
-                productRepo.AddProduct(product1);
-
-                Console.WriteLine("Product added.\n");
+                CatchErrors.InputError();
+                ShowProducts();
             }
-
-            ShowProducts();
         }
         
         private void UpdateProduct()
@@ -236,71 +257,90 @@ namespace Market_App.Models
             Console.WriteLine("2. Edit product");
             Console.WriteLine("3. Back to Menu");
 
-            Console.Write("\nEnter option: ");
+            Console.Write("\n> ");
 
-            int choose = int.Parse(Console.ReadLine());
-            if (choose == 1)
+            string choose = Console.ReadLine();
+            switch(choose)
             {
-                DeleteProduct(table);
+                case "1":
+                    DeleteProduct(table);
+                    break;
+                case "2":
+                    EditProduct(table);
+                    break;
+                case "3":
+                    Execute();
+                    break;
+                default:
+                    CatchErrors.InputError();
+                    UpdateProduct(table);
+                    break;
             }
-            else if (choose == 2)
-            {
-                EditProduct(table);
-            }
-            else if (choose == 3)
-                Execute();
-            else
-            {
-                Console.WriteLine("You entered incorrectly! Please enter again.");
-                UpdateProduct(table);
-            }
-
         }
         
         private void SearchProduct()
         {
-            Console.Write("\nEnter the product name: ");
-
-            string nameProduct = Console.ReadLine();
-            
-            var products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct.Capitalize())).ToList();
-
-            if (products == null)
+            try
             {
-                products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct)).ToList();
+
+                Console.Write("\nEnter the product name: ");
+
+                string nameProduct = Console.ReadLine();
+
+                var products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct.Capitalize())).ToList();
+
+                if (products == null)
+                {
+                    products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct)).ToList();
+                }
+
+                var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
+
+                foreach (var product in products)
+                {
+                    table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
+                }
+
+                OptionMenu("Search product", table);
             }
-
-            var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
-
-            foreach(var product in products)
+            catch
             {
-                table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
-            }
+                CatchErrors.InputError();
 
-            OptionMenu("Search product", table);
+                ShowProducts();
+            }
         }
         
         private void DeleteProduct(ConsoleTable table)
         {
-
-            Console.Clear();
-
-            table.Write();
-
-            Console.Write("Enter №: ");
-            int id = int.Parse(Console.ReadLine());
-
-            var product = productRepo.GetAllProducts().Where(x => x.Id == id).FirstOrDefault();
-
-            if (product != null)
+            try
             {
-                productRepo.RemoveProduct(product);
-                ShowProducts();
+
+                Console.Clear();
+
+                table.Write();
+
+                Console.Write("Enter №: ");
+                int id = int.Parse(Console.ReadLine());
+
+                var product = productRepo.GetAllProducts().Where(x => x.Id == id).FirstOrDefault();
+
+                if (product != null)
+                {
+                    productRepo.RemoveProduct(product);
+                    ShowProducts();
+                }
+                else
+                {
+                    Console.WriteLine("Such a product is not available in the basket!");
+                    DeleteProduct(table);
+                }
             }
-            else
+            catch
             {
-                Console.WriteLine("Such a product is not available in the basket!");
-                DeleteProduct(table);
+                CatchErrors.InputError();
+
+                UpdateProduct(table);
             }
         }
         
@@ -313,8 +353,7 @@ namespace Market_App.Models
             Console.WriteLine("\n1. Add product");
             Console.WriteLine("2. Update product");
             Console.WriteLine("3. Search product");
-            Console.WriteLine("4. Delete product");
-            Console.WriteLine("5. Back to Menu");
+            Console.WriteLine("4. Back to Menu");
             Console.Write("\n> ");
 
             string choose = Console.ReadLine();
@@ -331,13 +370,10 @@ namespace Market_App.Models
                     SearchProduct();
                     break;
                 case "4":
-                    DeleteProduct(table);
-                    break;
-                case "5":
                     Execute();
                     break;
                 default:
-                    Console.WriteLine("\nInput error! Please try again.");
+                    CatchErrors.InputError();
                     OptionMenu(table);
                     break;
             }
@@ -374,7 +410,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("\nInput error! Please try again.");
+                        CatchErrors.InputError();
                         OptionMenu(option, table);
                         break;
                 }
@@ -386,9 +422,9 @@ namespace Market_App.Models
 
                 table.Write();
 
-                Console.WriteLine("\n1. Add admin");
-                Console.WriteLine("2. Edit admin");
-                Console.WriteLine("3. Delete admin");
+                Console.WriteLine("\n1. Create admin");
+                Console.WriteLine("2. Edit");
+                Console.WriteLine("3. Delete");
                 Console.WriteLine("4. Back to Menu");
                 Console.Write("\n> ");
 
@@ -409,7 +445,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("\nInput error! Please try again.");
+                        CatchErrors.InputError();
                         OptionMenu(option, table);
                         break;
                 }
@@ -418,62 +454,72 @@ namespace Market_App.Models
         
         private void EditProduct(ConsoleTable table)
         {
-            Console.Clear();
-
-            table.Write();
-
-            Console.Write("\nEnter №: ");
-
-            int id = int.Parse(Console.ReadLine());
-
-            var product = productRepo.GetAllProducts().Where(x => x.Id.Equals(id)).FirstOrDefault();
-
-            Console.Clear();
-
-            table.Write();
-
-            Console.WriteLine("\n1. Name | 2. Price | 3. Unit | 4. Residue | 5. Type | 6. Back ");
-
-            Console.Write("\n> ");
-
-            int choose = int.Parse(Console.ReadLine());
-
-            if (product != null)
+            try
             {
-                switch (choose)
-                {
-                    case 1:
-                        Console.Write("Enter name: ");
-                        product.Name = Console.ReadLine().Capitalize();
-                        break;
-                    case 2:
-                        Console.Write("Enter price: ");
-                        product.Price = int.Parse(Console.ReadLine());
-                        break;
-                    case 3:
-                        Console.Write("Enter unit: ");
-                        product.Unit = Console.ReadLine();
-                        break;
-                    case 4:
-                        Console.Write("Enter residue: ");
-                        product.Residue = int.Parse(Console.ReadLine());
-                        break;
-                    case 5:
-                        Console.Write("Enter type: ");
-                        product.Type = Console.ReadLine().Capitalize();
-                        break;
-                    case 6:
-                        UpdateProduct(table);
-                        break;
-                    default:
-                        EditProduct(table);
-                        break;
-                }
 
-                productRepo.Update(product);
+                Console.Clear();
+
+                table.Write();
+
+                Console.Write("\nEnter №: ");
+
+                int id = int.Parse(Console.ReadLine());
+
+                var product = productRepo.GetAllProducts().Where(x => x.Id.Equals(id)).FirstOrDefault();
+
+                Console.Clear();
+
+                table.Write();
+
+                Console.WriteLine("\n1. Name | 2. Price | 3. Unit | 4. Residue | 5. Type | 6. Back ");
+
+                Console.Write("\n> ");
+
+                int choose = int.Parse(Console.ReadLine());
+
+                if (product != null)
+                {
+                    switch (choose)
+                    {
+                        case 1:
+                            Console.Write("Enter name: ");
+                            product.Name = Console.ReadLine().Capitalize();
+                            break;
+                        case 2:
+                            Console.Write("Enter price: ");
+                            product.Price = int.Parse(Console.ReadLine());
+                            break;
+                        case 3:
+                            Console.Write("Enter unit: ");
+                            product.Unit = Console.ReadLine();
+                            break;
+                        case 4:
+                            Console.Write("Enter residue: ");
+                            product.Residue = int.Parse(Console.ReadLine());
+                            break;
+                        case 5:
+                            Console.Write("Enter type: ");
+                            product.Type = Console.ReadLine().Capitalize();
+                            break;
+                        case 6:
+                            UpdateProduct(table);
+                            break;
+                        default:
+                            EditProduct(table);
+                            break;
+                    }
+
+                    productRepo.Update(product);
+
+                    UpdateProduct();
+
+                }
+            }
+            catch
+            {
+                CatchErrors.InputError();
 
                 UpdateProduct();
-
             }
         }
         
@@ -493,82 +539,102 @@ namespace Market_App.Models
         
         private void EditUser(ConsoleTable table)
         {
-            Console.Clear();
-
-            table.Write();
-
-            Console.Write("\nEnter №: ");
-
-            int id = int.Parse(Console.ReadLine());
-
-            var admin = _Db.Users.Where(x => x.Id.Equals(id)).FirstOrDefault();
-
-            Console.Clear();
-
-            table.Write();
-
-            Console.WriteLine("\n1. First Name | 2. Last Name | 3. Login | 4. Password | 5. Back ");
-
-            Console.Write("\n> ");
-
-            int choose = int.Parse(Console.ReadLine());
-
-            if (admin != null)
+            try
             {
-                switch (choose)
+
+                Console.Clear();
+
+                table.Write();
+
+                Console.Write("\nEnter №: ");
+
+                int id = int.Parse(Console.ReadLine());
+
+                var admin = userRepo.GetAllUsers().Where(x => x.Id.Equals(id)).FirstOrDefault();
+
+                Console.Clear();
+
+                table.Write();
+
+                Console.WriteLine("\n1. First Name | 2. Last Name | 3. Login | 4. Password | 5. Back ");
+
+                Console.Write("\n> ");
+
+                int choose = int.Parse(Console.ReadLine());
+
+                if (admin != null)
                 {
-                    case 1:
-                        Console.Write("Enter name: ");
-                        admin.FirstName = Console.ReadLine().Capitalize();
-                        break;
-                    case 2:
-                        Console.Write("Enter price: ");
-                        admin.LastName = Console.ReadLine().Capitalize();
-                        break;
-                    case 3:
-                        Console.Write("Enter unit: ");
-                        admin.Login = Console.ReadLine();
-                        break;
-                    case 4:
-                        Console.Write("Enter residue: ");
-                        admin.Password = Console.ReadLine();
-                        break;
-                    default:
-                        EditUser(table);
-                        break;
+                    switch (choose)
+                    {
+                        case 1:
+                            Console.Write("Enter name: ");
+                            admin.FirstName = Console.ReadLine().Capitalize();
+                            break;
+                        case 2:
+                            Console.Write("Enter price: ");
+                            admin.LastName = Console.ReadLine().Capitalize();
+                            break;
+                        case 3:
+                            Console.Write("Enter unit: ");
+                            admin.Login = Console.ReadLine();
+                            break;
+                        case 4:
+                            Console.Write("Enter residue: ");
+                            admin.Password = Console.ReadLine();
+                            break;
+                        default:
+                            EditUser(table);
+                            break;
+                    }
+                    userRepo.EditUser(admin);
+                    ShowUsers();
                 }
-                userRepo.EditUser(admin);
+            }
+            catch
+            {
+                CatchErrors.InputError();
+
                 ShowUsers();
             }
         }
         
         private void DeleteUser(ConsoleTable table)
         {
-            Console.Clear();
-
-            table.Write();
-
-            Console.Write("Enter №: ");
-
-            int id = int.Parse(Console.ReadLine());
-
-            var admin = _Db.Users.Where(x => x.Id == id).FirstOrDefault();
-
-            if (admin != null)
+            try
             {
-                userRepo.RemoveUser(admin);
-                ShowUsers();
+
+                Console.Clear();
+
+                table.Write();
+
+                Console.Write("Enter №: ");
+
+                int id = int.Parse(Console.ReadLine());
+
+                var admin = userRepo.GetAllUsers().Where(x => x.Id == id).FirstOrDefault();
+
+                if (admin != null)
+                {
+                    userRepo.RemoveUser(admin);
+                    ShowUsers();
+                }
+                else
+                {
+                    Console.WriteLine("Such a product is not available in the basket!");
+                    DeleteUser(table);
+                }
             }
-            else
+            catch
             {
-                Console.WriteLine("Such a product is not available in the basket!");
-                DeleteUser(table);
+                CatchErrors.InputError();
+
+                ShowUsers();
             }
         }
 
         private bool AdminInspection(string login)
         {
-            return _Db.Users.Any(x => x.Login == login);
+            return userRepo.GetAllUsers().Any(x => x.Login == login);
         }
 
     }
