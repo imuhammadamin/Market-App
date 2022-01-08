@@ -9,9 +9,11 @@ namespace Market_App.Models
         private IList<Product> _sellingProducts = new List<Product>();
 
         private static ProductRepository productRepository = new ProductRepository();
+
         private void SellingProducts()
         {
             _sellingProducts.Clear();
+
             foreach (Product res in productRepository.GetAllProducts())
             {
                 if (res.Price < 8000)
@@ -26,9 +28,11 @@ namespace Market_App.Models
                 _sellingProducts.Add(res);
             }
         }
+
         public IList<Product> GetProductsForSelling()
         {
             SellingProducts();
+
             return _sellingProducts;
         }
     }
