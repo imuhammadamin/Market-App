@@ -10,7 +10,9 @@ namespace Market_App.Models
     internal class ProductRepository : IProductRepository
     {
         private DbContextApp _Db = new DbContextApp();
+
         private IList<Product> _Products = new List<Product>();
+
         public IList<Product> GetAllProducts()
         {
             _Products = _Db.Products.ToList();

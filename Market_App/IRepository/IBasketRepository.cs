@@ -8,9 +8,12 @@ namespace Market_App.IRepository
 {
     interface IBasketRepository
     {
-        public void AddToBasket(Product product);
-        public bool RemoveFromBasket(Product product);
-        public IList<Product> GetBasket();
-        public void ClearBasket();
+        void AddToBasket(Product product);
+        
+        bool RemoveFromBasket(Product product);
+        
+        IList<Product> GetBasket();
+        
+        void ClearBasket();
     }
 }

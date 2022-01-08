@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Javlonbek\\Downloads\\market1\\Market-App\\Market_App\\Market_App.csproj": {}
+    "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\Market_App.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Javlonbek\\Downloads\\market1\\Market-App\\Market_App\\Market_App.csproj": {
+    "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\Market_App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Javlonbek\\Downloads\\market1\\Market-App\\Market_App\\Market_App.csproj",
+        "projectUniqueName": "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\Market_App.csproj",
         "projectName": "Market_App",
-        "projectPath": "C:\\Users\\Javlonbek\\Downloads\\market1\\Market-App\\Market_App\\Market_App.csproj",
+        "projectPath": "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\Market_App.csproj",
         "packagesPath": "C:\\Users\\Javlonbek\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Javlonbek\\Downloads\\market1\\Market-App\\Market_App\\obj\\",
+        "outputPath": "C:\\Users\\Javlonbek\\Documents\\GitHub\\Market-App\\Market_App\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

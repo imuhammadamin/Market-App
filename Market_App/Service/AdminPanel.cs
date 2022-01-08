@@ -16,6 +16,7 @@ namespace Market_App.Models
     internal class AdminPanel
     {
         private DbContextApp _Db = new DbContextApp();
+
         static IProductRepository productRepo = new ProductRepository();
 
         static IUserRepository userRepo = new UserRepository();
@@ -398,7 +399,6 @@ namespace Market_App.Models
         
         private void EditProduct(ConsoleTable table)
         {
-
             Console.Clear();
 
             table.Write();
@@ -460,7 +460,6 @@ namespace Market_App.Models
         
         private void ShowUsers()
         {
-
             var users = userRepo.GetAllUsers();
 
             var table = new ConsoleTable("№", "First Name", "Last Name", "Role", "Login", "Password");
@@ -475,8 +474,6 @@ namespace Market_App.Models
         
         private void EditUser(ConsoleTable table)
         {
-
-
             Console.Clear();
 
             table.Write();
@@ -528,7 +525,6 @@ namespace Market_App.Models
         
         private void DeleteUser(ConsoleTable table)
         {
-
             Console.Clear();
 
             table.Write();

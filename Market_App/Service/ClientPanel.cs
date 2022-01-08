@@ -20,9 +20,9 @@ namespace Market_App.Models
         static Regist regist = new Regist();
 
         IBasketRepository basketRepository = new BasketRepository();
+
         public void Execute()
         {
-
             while (true)
             {
                 Console.Clear();

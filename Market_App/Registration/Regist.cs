@@ -39,6 +39,7 @@ namespace Market_App.Registration
                     break;
             }
         }
+        
         public void SignUp()
         {
 
@@ -82,6 +83,7 @@ namespace Market_App.Registration
             else if (choose == "2")
                 Environment.Exit(0);
         }
+        
         public void SignIn()
         {
 
@@ -137,6 +139,7 @@ namespace Market_App.Registration
             }
 
         }
+        
         public string ReadPassword()
         {
             string password = "";
