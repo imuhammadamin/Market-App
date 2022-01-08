@@ -241,16 +241,23 @@ namespace Market_App.Models
         
         private void SearchProduct()
         {
-
             Console.Write("\nEnter the product name: ");
 
             string nameProduct = Console.ReadLine();
             
-            var product = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct.Capitalize())).FirstOrDefault();
-            
+            var products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct.Capitalize())).ToList();
+
+            if (products == null)
+            {
+                products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct)).ToList();
+            }
+
             var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-            table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
+            foreach(var product in products)
+            {
+                table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
+            }
 
             OptionMenu("Search product", table);
         }
@@ -285,12 +292,12 @@ namespace Market_App.Models
 
             table.Write();
 
-            Console.WriteLine("1. Add product");
+            Console.WriteLine("\n1. Add product");
             Console.WriteLine("2. Update product");
             Console.WriteLine("3. Search product");
             Console.WriteLine("4. Delete product");
             Console.WriteLine("5. Back to Menu");
-            Console.Write("\nEnter option: ");
+            Console.Write("\n> ");
 
             string choose = Console.ReadLine();
 
@@ -312,7 +319,7 @@ namespace Market_App.Models
                     Execute();
                     break;
                 default:
-                    Console.WriteLine("You entered incorrectly! Please enter again.");
+                    Console.WriteLine("\nInput error! Please try again.");
                     OptionMenu(table);
                     break;
             }
@@ -326,11 +333,11 @@ namespace Market_App.Models
 
                 table.Write();
 
-                Console.WriteLine("1. Show all products");
+                Console.WriteLine("\n1. Show all products");
                 Console.WriteLine("2. Update product");
                 Console.WriteLine("3. Delete product");
                 Console.WriteLine("4. Back to Menu");
-                Console.Write("\nEnter option: ");
+                Console.Write("\n> ");
 
                 string choose = Console.ReadLine();
 
@@ -349,7 +356,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("You entered incorrectly! Please enter again.");
+                        Console.WriteLine("\nInput error! Please try again.");
                         OptionMenu(option, table);
                         break;
                 }
@@ -361,11 +368,11 @@ namespace Market_App.Models
 
                 table.Write();
 
-                Console.WriteLine("1. Add admin");
+                Console.WriteLine("\n1. Add admin");
                 Console.WriteLine("2. Edit admin");
                 Console.WriteLine("3. Delete admin");
                 Console.WriteLine("4. Back to Menu");
-                Console.Write("\nEnter option: ");
+                Console.Write("\n> ");
 
                 string choose = Console.ReadLine();
 
@@ -384,7 +391,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("You entered incorrectly! Please enter again.");
+                        Console.WriteLine("\nInput error! Please try again.");
                         OptionMenu(option, table);
                         break;
                 }
@@ -409,7 +416,7 @@ namespace Market_App.Models
 
             Console.WriteLine("\n1. Name | 2. Price | 3. Unit | 4. Residue | 5. Type | 6. Back ");
 
-            Console.Write("> ");
+            Console.Write("\n> ");
 
             int choose = int.Parse(Console.ReadLine());
 
@@ -484,7 +491,7 @@ namespace Market_App.Models
 
             Console.WriteLine("\n1. First Name | 2. Last Name | 3. Login | 4. Password | 5. Back ");
 
-            Console.Write("> ");
+            Console.Write("\n> ");
 
             int choose = int.Parse(Console.ReadLine());
 

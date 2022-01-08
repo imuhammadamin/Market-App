@@ -79,12 +79,19 @@ namespace Market_App.Models
 
                 string nameProduct = Console.ReadLine();
 
-                var prod = sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct.Capitalize()));
+                var products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct.Capitalize())).ToList();
+
+                if (products == null)
+                {
+                    products = sales.GetProductsForSelling().Where(x => x.Name.Contains(nameProduct)).ToList();
+                }
 
                 var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
-                foreach (var pr in prod)
-                    table.AddRow(pr.Id, pr.Name, pr.Price, pr.Unit, pr.Residue, pr.Type);
+                foreach (var product in products)
+                {
+                    table.AddRow(product.Id, product.Name, product.Price, product.Unit, product.Residue, product.Type);
+                }
 
                 Console.Clear();
 
@@ -220,14 +227,14 @@ namespace Market_App.Models
         private void OptionMenu(string firstOption)
         {
 
-            Console.WriteLine($"1. {firstOption}");
+            Console.WriteLine($"\n1. {firstOption}");
 
             if (firstOption == "Add to Basket")
             {
                 Console.WriteLine("2. Search products");
                 Console.WriteLine("3. Show Basket");
                 Console.WriteLine("4. Back to Menu");
-                Console.Write("Enter option: ");
+                Console.Write("\n> ");
 
                 string option = Console.ReadLine();
 
@@ -246,7 +253,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("Please enter only 1, 2, 3 or 4!");
+                        Console.WriteLine("\nInput error! Please try again.");
                         OptionMenu(firstOption);
                         break;
                 }
@@ -256,7 +263,7 @@ namespace Market_App.Models
                 Console.WriteLine("2. Remove from basket");
                 Console.WriteLine("3. Remove all products from the basket");
                 Console.WriteLine("4. Back to Menu");
-                Console.Write("Enter option: ");
+                Console.Write("\n> ");
 
                 string option = Console.ReadLine();
 
@@ -276,7 +283,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("Please enter only 1, 2, 3 or 4!");
+                        Console.WriteLine("\nInput error! Please try again.");
                         OptionMenu(firstOption);
                         break;
                 }
@@ -287,7 +294,7 @@ namespace Market_App.Models
                 Console.WriteLine("3. Show all products");
                 Console.WriteLine("4. Show Basket");
                 Console.WriteLine("5. Back to Menu");
-                Console.Write("Enter option: ");
+                Console.Write("\n> ");
 
                 string option = Console.ReadLine();
 
@@ -309,7 +316,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("Please enter only 1, 2, 3, 4 or 5!");
+                        Console.WriteLine("\nInput error! Please try again.");
                         OptionMenu(firstOption);
                         break;
                 }
@@ -318,7 +325,7 @@ namespace Market_App.Models
             {
                 Console.WriteLine("2. Show all products");
                 Console.WriteLine("3. Back to Menu");
-                Console.Write("Enter option: ");
+                Console.Write("\n> ");
 
                 string option = Console.ReadLine();
 
@@ -334,7 +341,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("Please enter only 1, 2 or 3!");
+                        Console.WriteLine("\nInput error! Please try again.");
                         OptionMenu(firstOption);
                         break;
                 }
@@ -342,7 +349,7 @@ namespace Market_App.Models
             else
             {
                 Console.WriteLine("2. Back to Menu");
-                Console.Write("Enter option: ");
+                Console.Write("\n> ");
 
                 string option = Console.ReadLine();
 
@@ -356,7 +363,7 @@ namespace Market_App.Models
                         Execute();
                         break;
                     default:
-                        Console.WriteLine("Please enter only 1 or 2!");
+                        Console.WriteLine("\nInput error! Please try again.");
                         OptionMenu(firstOption);
                         break;
                 }
@@ -378,7 +385,7 @@ namespace Market_App.Models
 
             basketRepository.ClearBasket();
 
-            Console.Write("Do you want to buy all the products?[y, n]: ");
+            Console.Write("Do you want to buy all the products? [y, n]: ");
 
             string choose = Console.ReadLine();
 
