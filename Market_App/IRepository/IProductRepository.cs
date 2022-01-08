@@ -15,6 +15,6 @@ namespace Market_App.IRepository
         
         void Update(Product product);
         
-        void Calculation(int id, float amount);
+        void Calculation(IList<Product> products);
     }
 }

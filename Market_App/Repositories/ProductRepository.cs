@@ -11,12 +11,12 @@ namespace Market_App.Models
     {
         private DbContextApp _Db = new DbContextApp();
 
-        private IList<Product> _Products = new List<Product>();
+        private IList<Product> _products = new List<Product>();
 
         public IList<Product> GetAllProducts()
         {
-            _Products = _Db.Products.ToList();
-            return _Products;
+            _products = _Db.Products.ToList();
+            return _products;
         }
         
         public void RemoveProduct(Product product)
@@ -40,7 +40,7 @@ namespace Market_App.Models
         {
             AdminPanel adminPanel = new AdminPanel();
 
-            var product = _Products.Where(x => x.Id == prod.Id).FirstOrDefault();
+            var product = _products.Where(x => x.Id == prod.Id).FirstOrDefault();
 
             if (product != null)
             {
@@ -54,20 +54,22 @@ namespace Market_App.Models
             {
                 adminPanel.Execute();
             }
-            _Db.Products.UpdateRange(_Products);
+            _Db.Products.UpdateRange(_products);
             _Db.SaveChanges();
         }
 
-        public void Calculation(int id, float amount)
+        public void Calculation(IList<Product> products)
         {
-            var product = _Products.Where(x => x.Id == id).FirstOrDefault();
-
-            if (product != null)
+            foreach(var product in products)
             {
-                product.Residue -= amount;
+                var prod = _Db.Products.Where(x => x.Id == product.Id).FirstOrDefault();
+
+                prod.Residue -= product.Residue;
+                
+                _Db.Products.Update(prod);
+                
+                _Db.SaveChanges();
             }
-            _Db.UpdateRange(_Products);
-            _Db.SaveChanges();
         }
 
         public void AddProduct(Product product)

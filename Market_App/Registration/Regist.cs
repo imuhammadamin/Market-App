@@ -4,11 +4,14 @@ using Market_App.IRepository;
 using Market_App.Models;
 using Market_App.Service;
 using System;
+using System.Linq;
 
 namespace Market_App.Registration
 {
     internal class Regist
     {
+        private static DbContextApp _Db = new DbContextApp();
+
         private IUserRepository _userRepo = new UserRepository();
 
         static AdminPanel adminPanel = new AdminPanel();
@@ -41,51 +44,75 @@ namespace Market_App.Registration
             }
         }
         
-        public void SignUp()
+        private void SignUp()
         {
-
             Console.Clear();
 
-            Console.Write("Name: ");
+            Console.Write("First name: ");
             string firstName = Console.ReadLine().Capitalize();
 
-            Console.Write("Surname: ");
+            Console.Write("Last name: ");
             string lastName = Console.ReadLine().Capitalize();
 
             Console.Write("Login: ");
-            string userslogin = Console.ReadLine();
+            string userlogin = Console.ReadLine();
 
-            Console.Write("Password: ");
-            string userspassword = Console.ReadLine();
-
-            if (userspassword.Length < 5)
+            if (!UserInspection(userlogin))
             {
-                Console.Clear();
-                Console.WriteLine("Enter more than 5 items");
-            }
+                Console.Write("Password: ");
+                string userspassword = Console.ReadLine();
 
-            _userRepo.Create(
-                new User
+                if (userspassword.Length < 5)
                 {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Role = UserRole.User,
-                    Login = userslogin,
-                    Password = userspassword
-                });
-            Console.WriteLine("\n1.Back To\t|\t2.Exit ");
-            Console.Write("Select: ");
-            string choose = Console.ReadLine();
+                    Console.Clear();
+                    Console.WriteLine("Enter more than 5 items");
+                }
+                else
+                {
+                    _userRepo.Create(
+                        new User
+                        {
+                            FirstName = firstName,
+                            LastName = lastName,
+                            Role = UserRole.User,
+                            Login = userlogin,
+                            Password = userspassword
+                        });
 
-            if (choose == "1")
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("You have successfully registered!");
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                    Console.WriteLine("\n1.Menu\t|\t2.Exit ");
+                    Console.Write("\n> ");
+                    string choose = Console.ReadLine();
+
+                    if (choose == "1")
+                    {
+                        Console.Clear();
+                        Menu();
+                    }
+                    else if (choose == "2")
+                        Environment.Exit(0);
+                }
+            }
+            else
             {
                 Console.Clear();
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Such a user exists!");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write("\nWould you like to try again? [y, n]: ");
+                string choose = Console.ReadLine();
+
+                if (choose == "y" || choose == "Y") SignUp();
+                else Menu();
             }
-            else if (choose == "2")
-                Environment.Exit(0);
         }
         
-        public void SignIn()
+        private void SignIn()
         {
             Console.Clear();
 
@@ -139,7 +166,7 @@ namespace Market_App.Registration
 
         }
         
-        public string ReadPassword()
+        private string ReadPassword()
         {
             string password = "";
             try
@@ -169,6 +196,11 @@ namespace Market_App.Registration
                 ReadPassword();
             }
             return password;
+        }
+
+        private bool UserInspection(string login)
+        {
+            return _Db.Users.Any(x => x.Login == login);
         }
     }
 }

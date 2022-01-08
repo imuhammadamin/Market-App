@@ -77,30 +77,48 @@ namespace Market_App.Models
             Console.Write("Enter login: ");
             string login = Console.ReadLine();
 
-            Console.Write("Enter password: ");
-            string password = Console.ReadLine();
-            User admin = new User
+            if (!AdminInspection(login))
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Role = UserRole.Admin,
-                Login = login,
-                Password = password
-            };
-            userRepo.Create(admin);
 
-            Console.Clear();
+                Console.Write("Enter password: ");
+                string password = Console.ReadLine();
+                User admin = new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Role = UserRole.Admin,
+                    Login = login,
+                    Password = password
+                };
+                userRepo.Create(admin);
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Succes!\n");
-            Console.ForegroundColor = ConsoleColor.White;
+                Console.Clear();
 
-            Console.Write("Do you want add admin again? [y, n]: ");
-            string choose = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Succes!\n");
+                Console.ForegroundColor = ConsoleColor.White;
 
-            if (choose == "Y" || choose == "y")
-                AddAdmin();
-            else Execute();
+                Console.Write("Do you want add admin again? [y, n]: ");
+                string choose = Console.ReadLine();
+
+                if (choose == "Y" || choose == "y")
+                    AddAdmin();
+                else Execute();
+            }
+            else
+            {
+                Console.Clear();
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Such a user exists!");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write("\nWould you like to try again? [y, n]: ");
+                string choose = Console.ReadLine();
+
+                if (choose == "y" || choose == "Y") AddAdmin();
+                else Execute();
+            }
         }
   
         private void ShowProducts()
@@ -547,5 +565,11 @@ namespace Market_App.Models
                 DeleteUser(table);
             }
         }
+
+        private bool AdminInspection(string login)
+        {
+            return _Db.Users.Any(x => x.Login == login);
+        }
+
     }
 }

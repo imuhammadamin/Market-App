@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Market_App.IRepository;
+using Market_App.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,15 +8,13 @@ namespace Market_App.Models
 {
     internal class Sales
     {
-        private IList<Product> _sellingProducts = new List<Product>();
-
-        private static ProductRepository productRepository = new ProductRepository();
-
-        private void SellingProducts()
+        private IList<Product> SellingProducts()
         {
-            _sellingProducts.Clear();
+            DbContextApp _Db = new DbContextApp();
 
-            foreach (Product res in productRepository.GetAllProducts())
+            IList <Product> _products = _Db.Products.ToList();
+
+            foreach (var res in _products)
             {
                 if (res.Price < 8000)
                     res.Price += 500;
@@ -24,16 +24,13 @@ namespace Market_App.Models
                     res.Price += 5000;
                 else if (res.Price < 80000)
                     res.Price += 10000;
-
-                _sellingProducts.Add(res);
             }
+            return _products;
         }
 
         public IList<Product> GetProductsForSelling()
         {
-            SellingProducts();
-
-            return _sellingProducts;
+            return SellingProducts();
         }
     }
 }

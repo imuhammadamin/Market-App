@@ -199,31 +199,6 @@ namespace Market_App.Models
             
         }
 
-        private void Calculation(int id, float amount)
-        {
-
-            var products = productRepo.GetAllProducts();
-
-            foreach (var pr in products)
-            {
-                if (pr.Id == id)
-                    pr.Residue -= amount;
-            }
-
-            using (TextWriter tw = new StreamWriter(Constants.ProductsDbPath))
-            {
-                for (int i = 0; i < products.Count; i++)
-                    tw.WriteLine(
-                          products[i].Id + " "
-                        + products[i].Name + " "
-                        + products[i].Price + " "
-                        + products[i].Unit + " "
-                        + products[i].Residue + " "
-                        + products[i].Type);
-            }
-
-        }
-
         private void OptionMenu(string firstOption)
         {
 
@@ -372,31 +347,15 @@ namespace Market_App.Models
 
         private void Buy()
         {
-            Console.Write("Enter №: ");
-
-            int id = int.Parse(Console.ReadLine());
-
-            var product = basketRepository.GetBasket().Where(x => x.Id.Equals(id));
-
-            foreach (var pr in product)
-            {
-                productRepo.Calculation(id, pr.Residue);
-            }
-
-            basketRepository.ClearBasket();
-
             Console.Write("Do you want to buy all the products? [y, n]: ");
 
             string choose = Console.ReadLine();
 
             if (choose == "y" || choose == "Y")
             {
-                var prod = basketRepository.GetBasket();
+                var products = basketRepository.GetBasket();
 
-                foreach (var pr in prod)
-                {
-                    Calculation(pr.Id, pr.Residue);
-                }
+                productRepo.Calculation(products);
 
                 basketRepository.ClearBasket();
 
