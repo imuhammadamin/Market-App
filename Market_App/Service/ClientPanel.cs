@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Market_App.Registration;
+using Market_App.Extensions;
 
 namespace Market_App.Models
 {
@@ -75,9 +76,11 @@ namespace Market_App.Models
             try
             {
                 Console.Write("\nEnter the product name: ");
+
                 string nameProduct = Console.ReadLine();
-                string nameProduct1 = char.ToUpper(nameProduct[0]) + nameProduct.Substring(1);
-                var prod = sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct1));
+
+                var prod = sales.GetProductsForSelling().Where(x => x.Name.Equals(nameProduct.Capitalize()));
+
                 var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
 
                 foreach (var pr in prod)

@@ -32,7 +32,7 @@ namespace Market_App.Models
                 
                 Console.Clear();
 
-                Console.WriteLine("1. Browse all products | 2. Add product | 3. Update product | 4. Add Admin | 5. Show all admins | 6. Log out | 7. Exit");
+                Console.WriteLine("1. Browse all products | 2. Update product | 3. Add Admin | 4. Show all admins | 5. Log out | 6. Exit");
                 
                 Console.Write("\n> ");
                 
@@ -44,21 +44,18 @@ namespace Market_App.Models
                         ShowProducts();
                         break;
                     case "2":
-                        AddProduct();
-                        break;
-                    case "3":
                         UpdateProduct();
                         break;
-                    case "4":
+                    case "3":
                         AddAdmin();
                         break;
-                    case "5":
+                    case "4":
                         ShowUsers();
                         break;
-                    case "6":
+                    case "5":
                         regist.Menu();
                         break;
-                    case "7":
+                    case "6":
                         Environment.Exit(0);
                         break;
                     default:
