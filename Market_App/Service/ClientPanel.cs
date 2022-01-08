@@ -2,11 +2,7 @@
 using Market_App.IRepository;
 using Market_App.Service;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Market_App.Registration;
 using Market_App.Extensions;
 using System.Threading;
