@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Market_App.Registration;
 using Market_App.Extensions;
+using System.Threading;
 
 namespace Market_App.Models
 {
@@ -155,7 +156,9 @@ namespace Market_App.Models
                     Console.WriteLine("\nNo such product available!\n");
                     Console.ForegroundColor = ConsoleColor.White;
 
-                    AddToBasket("");
+                    Thread.Sleep(1500);
+
+                    ShowProducts();
                 }
 
                 Console.Write("Enter the amount you want to buy: ");
