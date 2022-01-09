@@ -79,7 +79,7 @@ namespace Market_App.Models
                 {
 
                     Console.Write("Enter password: ");
-                    string password = Console.ReadLine();
+                    string password = MethodService.HashPassword(Console.ReadLine());
                     User admin = new User
                     {
                         FirstName = firstName,
@@ -563,20 +563,20 @@ namespace Market_App.Models
                     switch (choose)
                     {
                         case 1:
-                            Console.Write("Enter name: ");
+                            Console.Write("First name: ");
                             admin.FirstName = Console.ReadLine().Capitalize();
                             break;
                         case 2:
-                            Console.Write("Enter price: ");
+                            Console.Write("Last name: ");
                             admin.LastName = Console.ReadLine().Capitalize();
                             break;
                         case 3:
-                            Console.Write("Enter unit: ");
+                            Console.Write("Login: ");
                             admin.Login = Console.ReadLine();
                             break;
                         case 4:
-                            Console.Write("Enter residue: ");
-                            admin.Password = Console.ReadLine();
+                            Console.Write("Password: ");
+                            admin.Password = MethodService.HashPassword(Console.ReadLine());
                             break;
                         default:
                             EditUser(table);

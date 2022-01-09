@@ -63,6 +63,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[5.0.13, )"
+            },
+            "XAct.Core.PCL": {
+              "target": "Package",
+              "version": "[0.0.5014, )"
             }
           },
           "imports": [

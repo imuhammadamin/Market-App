@@ -214,3 +214,5 @@ C:\Users\Javlonbek\Downloads\market1\Market-App\Market_App\obj\Debug\net5.0\Mark
 C:\Users\Javlonbek\Downloads\market1\Market-App\Market_App\obj\Debug\net5.0\ref\Market_App.dll
 C:\Users\Javlonbek\Downloads\market1\Market-App\Market_App\obj\Debug\net5.0\Market_App.pdb
 C:\Users\Javlonbek\Downloads\market1\Market-App\Market_App\obj\Debug\net5.0\Market_App.genruntimeconfig.cache
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\Microsoft.Practices.ServiceLocation.dll
+C:\Users\Javlonbek\Documents\GitHub\Market-App\Market_App\bin\Debug\net5.0\XAct.Core.PCL.dll

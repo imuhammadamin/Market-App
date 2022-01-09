@@ -5,6 +5,8 @@ using Market_App.Models;
 using Market_App.Service;
 using System;
 using System.Linq;
+using System.Text;
+using XSystem.Security.Cryptography;
 
 namespace Market_App.Registration
 {
@@ -61,15 +63,16 @@ namespace Market_App.Registration
             if (!UserInspection(userlogin))
             {
                 Console.Write("Password: ");
-                string userspassword = Console.ReadLine();
+                string password = Console.ReadLine();
 
-                if (userspassword.Length < 5)
+                if (password.Length < 5)
                 {
                     Console.Clear();
                     Console.WriteLine("Enter more than 5 items");
                 }
                 else
                 {
+                    password = MethodService.HashPassword(password);
                     _userRepo.Create(
                         new User
                         {
@@ -77,7 +80,7 @@ namespace Market_App.Registration
                             LastName = lastName,
                             Role = UserRole.User,
                             Login = userlogin,
-                            Password = userspassword
+                            Password = password
                         });
 
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -121,7 +124,7 @@ namespace Market_App.Registration
             string login = Console.ReadLine();
 
             Console.Write("Password: ");
-            string password = ReadPassword();
+            string password = MethodService.HashPassword(ReadPassword());
 
             User user = _userRepo.Login(login, password);
 
