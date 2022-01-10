@@ -6,12 +6,15 @@ using System.Linq;
 using Market_App.Registration;
 using Market_App.Extensions;
 using System.Threading;
+using Market_App.Repositories;
 
 namespace Market_App.Models
 {
     internal class ClientPanel
     {
-        static IProductRepository productRepo = new ProductRepository();
+        IHistoryRepository historyRepo = new HistoryRepository();
+
+        IProductRepository productRepo = new ProductRepository();
 
         static Sales sales = new Sales();
 
@@ -118,18 +121,18 @@ namespace Market_App.Models
         {
             Console.Clear();
 
-            var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Type");
+            var table = new ConsoleTable("№", "Product Name", "Price", "Unit", "Residue", "Summ", "Type");
 
             float summ = 0;
             decimal summPrice = 0;
 
             foreach (var basket in basketRepository.GetBasket())
             {
-                table.AddRow(basket.Id, basket.Name, basket.Price, basket.Unit, basket.Residue, basket.Type);
+                table.AddRow(basket.Id, basket.Name, basket.Price, basket.Unit, basket.Residue, basket.Price * (decimal)basket.Residue, basket.Type);
                 summ = (float)basket.Price * basket.Residue;
                 summPrice += (decimal)summ;
             }
-            table.AddRow(" ", "Summ: ", summPrice, " ", " ", " ");
+            table.AddRow(" ", "Total summ: ", " ", " ", " ", summPrice, " ");
 
             table.Write();
 
@@ -357,6 +360,19 @@ namespace Market_App.Models
                 var products = basketRepository.GetBasket();
 
                 productRepo.Calculation(products);
+
+                decimal summ = 0;
+
+                foreach (var product in products)
+                    summ += product.Price * (decimal)product.Residue;
+
+                historyRepo.Create(new History()
+                {
+                    Customer = Regist.us,
+                    Products = products,
+                    Date = DateTime.Now.Date,
+                    Summ = summ
+                });
 
                 basketRepository.ClearBasket();
 

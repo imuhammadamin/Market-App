@@ -20,6 +20,8 @@ namespace Market_App.Registration
 
         static ClientPanel clientPanel = new ClientPanel();
 
+        public static User us = new User();
+
         public void Menu()
         {
             
@@ -137,6 +139,7 @@ namespace Market_App.Registration
 
                 else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
                 {
+                    us = user;
                     clientPanel.Execute();
                 }
             }

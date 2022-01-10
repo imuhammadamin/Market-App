@@ -11,5 +11,6 @@ namespace Market_App.Service
     {
         public static readonly string ProductsDbPath = @"..\..\..\Database\ProductsData\ProductsDB.txt";
         public static readonly string UsersDbPath = @"..\..\..\Database\UsersData";
+        public static readonly string HistoriesPath = @"..\..\..\Database\History.json";
     }
 }

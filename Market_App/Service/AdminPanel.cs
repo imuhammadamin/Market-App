@@ -8,6 +8,7 @@ using System.Linq;
 using Market_App.Registration;
 using Market_App.Extensions;
 using System.Threading;
+using Market_App.Repositories;
 
 namespace Market_App.Models
 {
@@ -16,6 +17,8 @@ namespace Market_App.Models
         static IProductRepository productRepo = new ProductRepository();
 
         static IUserRepository userRepo = new UserRepository();
+
+        static IHistoryRepository historyRepo = new HistoryRepository();
 
         static Sales sales = new Sales();
 
@@ -27,7 +30,7 @@ namespace Market_App.Models
                 
                 Console.Clear();
 
-                Console.WriteLine("1. Browse all products | 2. Update product | 3. Create Admin | 4. Show all users | 5. Log out | 6. Exit");
+                Console.WriteLine("1. Browse all products | 2. Sales information | 3. Create Admin | 4. Show all users | 5. Log out | 6. Exit");
                 
                 Console.Write("\n> ");
                 
@@ -39,7 +42,7 @@ namespace Market_App.Models
                         ShowProducts();
                         break;
                     case "2":
-                        UpdateProduct();
+                        SalesInformation();
                         break;
                     case "3":
                         AddAdmin();
@@ -627,10 +630,59 @@ namespace Market_App.Models
                 ShowUsers();
             }
         }
-
+        
         private bool AdminInspection(string login)
         {
             return userRepo.GetAllUsers().Any(x => x.Login == login);
+        }
+
+        private void SalesInformation()
+        {
+            ConsoleTable table = new ConsoleTable("№", "Customer", "Product name", "Product price", "Product residue", "Summ", "Date");
+            var histories = historyRepo.GetHistories();
+            decimal totalSumm = 0;
+
+            foreach(var history in histories)
+            {
+                for (int i = 0; i < history.Products.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        table.AddRow(
+                      history.Customer.Id,
+                      history.Customer.FirstName,
+                      history.Products[i].Name,
+                      history.Products[i].Price,
+                      history.Products[i].Residue,
+                      history.Products[i].Price * (decimal)history.Products[i].Residue,
+                        history.Date);
+                    }
+                    else
+                    {
+                        table.AddRow(
+                      " ",
+                      "" ,
+                      history.Products[i].Name,
+                      history.Products[i].Price,
+                      history.Products[i].Residue,
+                      history.Products[i].Price * (decimal)history.Products[i].Residue, " ");
+                    }
+
+                    totalSumm += history.Products[i].Price * (decimal)history.Products[i].Residue;
+                }
+
+                table.AddRow(" ", " ", " ", " ", "Total summ: ", totalSumm, " ");
+            }
+
+            Console.Clear();
+
+            table.Write();
+
+            Console.WriteLine("\n0. Back\n");
+
+            Console.Write("> ");
+
+            Console.ReadLine();
         }
 
     }
