@@ -134,12 +134,14 @@ namespace Market_App.Registration
             {
                 if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
                 {
+                    Console.Title = "Admin";
                     adminPanel.Execute();
                 }
 
                 else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
                 {
                     us = user;
+                    Console.Title = us.Login;
                     clientPanel.Execute();
                 }
             }
