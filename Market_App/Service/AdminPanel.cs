@@ -14,13 +14,13 @@ namespace Market_App.Models
 {
     internal class AdminPanel
     {
-        static IProductRepository productRepo = new ProductRepository();
+        private static IProductRepository productRepo = new ProductRepository();
 
-        static IUserRepository userRepo = new UserRepository();
+        private static IUserRepository userRepo = new UserRepository();
 
-        static IHistoryRepository historyRepo = new HistoryRepository();
+        private static IHistoryRepository historyRepo = new HistoryRepository();
 
-        static Sales sales = new Sales();
+        private static Sales sales = new Sales();
 
         public void Execute()
         {

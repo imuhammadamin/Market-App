@@ -370,7 +370,7 @@ namespace Market_App.Models
                 {
                     Customer = Regist.us,
                     Products = products,
-                    Date = DateTime.Now.Date,
+                    Date = DateTime.Now,
                     Summ = summ
                 });
 

@@ -13,7 +13,6 @@ namespace Market_App.Repositories
 {
     internal class HistoryRepository : IHistoryRepository
     {
-        
         public void Create(History history)
         {
             string histories = File.ReadAllText(Constants.HistoriesPath);

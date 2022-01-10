@@ -11,10 +11,13 @@ namespace Market_App.Models
     {
         [JsonProperty("Customer")]
         public User Customer { get; set; }
+        
         [JsonProperty("Products")]
         public IList<Product> Products { get; set; }
+        
         [JsonProperty("Date")]
         public DateTime Date { get; set; }
+        
         [JsonProperty("Summ")]
         public decimal Summ { get; set; }
     }
