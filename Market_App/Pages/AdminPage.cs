@@ -12,7 +12,7 @@ using Market_App.Repositories;
 
 namespace Market_App.Models
 {
-    internal class AdminPanel
+    internal class AdminPage
     {
         private static IProductRepository productRepo = new ProductRepository();
 
@@ -26,7 +26,7 @@ namespace Market_App.Models
         {
             while (true)
             {
-                Regist regist = new Regist();
+                MainMenu regist = new MainMenu();
                 
                 Console.Clear();
 
@@ -75,10 +75,10 @@ namespace Market_App.Models
                 Console.Write("Enter Last name: ");
                 string lastName = Console.ReadLine().Capitalize();
 
-                Console.Write("Enter login: ");
-                string login = Console.ReadLine();
+                Console.Write("Enter username: ");
+                string username = Console.ReadLine();
 
-                if (!AdminInspection(login))
+                if (!AdminInspection(username))
                 {
 
                     Console.Write("Enter password: ");
@@ -88,7 +88,7 @@ namespace Market_App.Models
                         FirstName = firstName,
                         LastName = lastName,
                         Role = UserRole.Admin,
-                        Login = login,
+                        Login = username,
                         Password = password
                     };
                     userRepo.Create(admin);
@@ -161,7 +161,7 @@ namespace Market_App.Models
 
                 string productName = Console.ReadLine();
 
-                var product = products.Where(x => x.Name == productName.Capitalize()).FirstOrDefault();
+                var product = products.FirstOrDefault(x => x.Name == productName.Capitalize());
 
                 if (product != null)
                 {
@@ -322,7 +322,7 @@ namespace Market_App.Models
                 Console.Write("Enter №: ");
                 int id = int.Parse(Console.ReadLine());
 
-                var product = productRepo.GetAllProducts().Where(x => x.Id == id).FirstOrDefault();
+                var product = productRepo.GetAllProducts().FirstOrDefault(x => x.Id == id);
 
                 if (product != null)
                 {
@@ -464,7 +464,7 @@ namespace Market_App.Models
 
                 int id = int.Parse(Console.ReadLine());
 
-                var product = productRepo.GetAllProducts().Where(x => x.Id.Equals(id)).FirstOrDefault();
+                var product = productRepo.GetAllProducts().FirstOrDefault(x => x.Id.Equals(id));
 
                 Console.Clear();
 
@@ -549,7 +549,7 @@ namespace Market_App.Models
 
                 int id = int.Parse(Console.ReadLine());
 
-                var admin = userRepo.GetAllUsers().Where(x => x.Id.Equals(id)).FirstOrDefault();
+                var admin = userRepo.GetAllUsers().FirstOrDefault(x => x.Id.Equals(id));
 
                 Console.Clear();
 
@@ -610,7 +610,7 @@ namespace Market_App.Models
 
                 int id = int.Parse(Console.ReadLine());
 
-                var admin = userRepo.GetAllUsers().Where(x => x.Id == id).FirstOrDefault();
+                var admin = userRepo.GetAllUsers().FirstOrDefault(x => x.Id == id);
 
                 if (admin != null)
                 {
@@ -631,9 +631,9 @@ namespace Market_App.Models
             }
         }
         
-        private bool AdminInspection(string login)
+        private bool AdminInspection(string username)
         {
-            return userRepo.GetAllUsers().Any(x => x.Login == login);
+            return userRepo.GetAllUsers().Any(x => x.Login == username);
         }
 
         private void SalesInformation()

@@ -21,7 +21,7 @@ namespace Market_App.Models
         
         public void RemoveProduct(Product product)
         {
-            AdminPanel adminPanel = new AdminPanel();
+            AdminPage adminPanel = new AdminPage();
             
             var prod = _Db.Products.FirstOrDefault(x => x.Id == product.Id);
             
@@ -38,7 +38,7 @@ namespace Market_App.Models
 
         public void Update(Product prod)
         {
-            AdminPanel adminPanel = new AdminPanel();
+            AdminPage adminPanel = new AdminPage();
 
             var product = _products.Where(x => x.Id == prod.Id).FirstOrDefault();
 

@@ -8,18 +8,14 @@ using System.Threading.Tasks;
 
 namespace Market_App.Models
 {
-    internal class User
+    internal class User : SignIn
     {
         public int Id { get; set; }
-        
+
         public string FirstName { get; set; }
-        
+
         public string LastName { get; set; }
-        
+
         public UserRole Role { get; set; } = UserRole.User;
-        
-        public string Login { get; set; }
-        
-        public string Password { get; set; }
     }
 }

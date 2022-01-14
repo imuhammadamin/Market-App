@@ -10,7 +10,7 @@ using Market_App.Repositories;
 
 namespace Market_App.Models
 {
-    internal class ClientPanel
+    internal class ClientPage
     {
         IHistoryRepository historyRepo = new HistoryRepository();
 
@@ -18,7 +18,7 @@ namespace Market_App.Models
 
         static Sales sales = new Sales();
 
-        static Regist regist = new Regist();
+        static MainMenu regist = new MainMenu();
 
         IBasketRepository basketRepository = new BasketRepository();
 
@@ -148,7 +148,7 @@ namespace Market_App.Models
                 Console.Write("Enter №: ");
                 int id = int.Parse(Console.ReadLine());
 
-                var product = sales.GetProductsForSelling().Where(x => x.Id.Equals(id)).FirstOrDefault();
+                var product = sales.GetProductsForSelling().FirstOrDefault(x => x.Id.Equals(id));
 
                 Product prod = new Product();
                 
@@ -368,7 +368,7 @@ namespace Market_App.Models
 
                 historyRepo.Create(new History()
                 {
-                    Customer = Regist.us,
+                    Customer = MainMenu.us,
                     Products = products,
                     Date = DateTime.Now,
                     Summ = summ

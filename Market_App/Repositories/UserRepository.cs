@@ -10,7 +10,7 @@ namespace Market_App.Models
 {
     internal class UserRepository : IUserRepository
     {
-        static ClientPanel clientPanel = new ClientPanel();
+        static ClientPage clientPanel = new ClientPage();
 
         private DbContextApp _Db = new DbContextApp();
 
@@ -35,9 +35,9 @@ namespace Market_App.Models
             return _Db.Users.Where(x => x.Role == UserRole.Admin).ToList();
         } 
 
-        public User Login(string login, string password)
+        public User Login(SignIn signIn)
         {
-            var user = _Db.Users.Where(x => x.Login == login && x.Password == password).FirstOrDefault();
+            var user = _Db.Users.Where(x => x.Login == signIn.Login && x.Password == signIn.Password).FirstOrDefault();
             if (user != null)
             {
                 return user;

@@ -16,7 +16,7 @@ namespace Market_App.IRepository
         
         IList<User> GetAdmins();
         
-        User Login(string login, string password);
+        User Login(SignIn signIn);
         
         void EditUser(User user);
         

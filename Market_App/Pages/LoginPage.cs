@@ -10,15 +10,15 @@ using XSystem.Security.Cryptography;
 
 namespace Market_App.Registration
 {
-    internal class Regist
+    internal class MainMenu
     {
         private static DbContextApp _Db = new DbContextApp();
 
         private IUserRepository _userRepo = new UserRepository();
 
-        static AdminPanel adminPanel = new AdminPanel();
+        static AdminPage adminPanel = new AdminPage();
 
-        static ClientPanel clientPanel = new ClientPanel();
+        static ClientPage clientPanel = new ClientPage();
 
         public static User us = new User();
 
@@ -60,9 +60,9 @@ namespace Market_App.Registration
             string lastName = Console.ReadLine().Capitalize();
 
             Console.Write("Login: ");
-            string userlogin = Console.ReadLine();
+            string Login = Console.ReadLine();
 
-            if (!UserInspection(userlogin))
+            if (!UserInspection(Login))
             {
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
@@ -81,7 +81,7 @@ namespace Market_App.Registration
                             FirstName = firstName,
                             LastName = lastName,
                             Role = UserRole.User,
-                            Login = userlogin,
+                            Login = Login,
                             Password = password
                         });
 
@@ -123,22 +123,22 @@ namespace Market_App.Registration
             Console.Clear();
 
             Console.Write("Login: ");
-            string login = Console.ReadLine();
+            string Login = Console.ReadLine();
 
             Console.Write("Password: ");
             string password = MethodService.HashPassword(ReadPassword());
 
-            User user = _userRepo.Login(login, password);
+            User user = _userRepo.Login(new SignIn() { Login = Login, Password = password });
 
             try
             {
-                if (login == user.Login && password == user.Password && user.Role == UserRole.Admin)
+                if (Login == user.Login && password == user.Password && user.Role == UserRole.Admin)
                 {
                     Console.Title = "Admin";
                     adminPanel.Execute();
                 }
 
-                else if (login == user.Login && password == user.Password && user.Role == UserRole.User)
+                else if (Login == user.Login && password == user.Password && user.Role == UserRole.User)
                 {
                     us = user;
                     Console.Title = us.Login;
@@ -152,25 +152,7 @@ namespace Market_App.Registration
                 Console.WriteLine("There is no such user!\n");
                 Console.ForegroundColor = ConsoleColor.White;
 
-                Console.WriteLine("1. Try again | 2. Sig Up | 3. Exit ");
-                Console.Write("\n> ");
-                string opt = Console.ReadLine();
-
-                switch (opt)
-                {
-                    case "1":
-                        Menu();
-                        break;
-                    case "2":
-                        SignUp();
-                        break;
-                    case "3":
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        Menu();
-                        break;
-                }
+                Menu();
             }
 
         }

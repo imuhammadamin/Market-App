@@ -17,7 +17,7 @@ namespace Market_App
         static void Main(string[] args)
         {
             
-             Regist regist = new Regist();
+             MainMenu regist = new MainMenu();
              regist.Menu();
             
         }
